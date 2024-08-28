@@ -63,6 +63,9 @@ require_once '../../gg/connection/config.php';
 
                 <ul class="dropdown-menu dropdown-menu-end">
                     <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 1): ?>
+                        <?php if ($_SESSION['nivel'] > 2): ?>
+                            <li><a class="dropdown-item" href="../../gg/view/v-home.php">Painel</a></li>
+                        <?php endif; ?>
                         <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
                         <li><a class="dropdown-item" href="#">Minhas compras</a></li>
                         <li><a class="dropdown-item" href="#">Meus Cupons</a></li>
@@ -86,5 +89,6 @@ require_once '../../gg/connection/config.php';
         AOS.init();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="../../js/carouselcategorias.js"></script>
     </body>
 </html>
