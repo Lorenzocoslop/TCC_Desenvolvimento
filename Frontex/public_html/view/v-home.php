@@ -23,9 +23,8 @@ $string = "
         <h1 data-aos='fade-up'>Categorias</h1>
     </div>
     
-    <section >";
+    <section data-aos='fade-left' style: 'margin: 20px'>";
 
-    
     $categorias = new Categorias($pdo);
     $dados = $categorias->buscaCategorias();
     $string .= $categorias->gerarCardsCategorias($dados);
