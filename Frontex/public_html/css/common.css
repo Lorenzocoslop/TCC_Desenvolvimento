@@ -1,0 +1,27 @@
+.btn-outline-custom {
+    color: #003399; 
+    border: 2px solid #003399; 
+    background-color: transparent; 
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-outline-custom:hover {
+    color: white;
+    background-color: #003399; 
+    border-color: #003399; 
+}
+
+.bg-custom{
+    background-color: #003399;
+    color: white; 
+}
+
+#navbarSupportedContent .saudacao {
+    margin-bottom: 0.5rem; /* Ajuste conforme necessário */
+    text-align: center; /* Centraliza o texto */
+}

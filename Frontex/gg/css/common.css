@@ -1,0 +1,24 @@
+.input-container {
+    display: flex; /* Usamos flexbox para posicionar a label e o input lado a lado */
+    align-items: center; /* Alinha verticalmente a label e o input */
+    margin: 20px; /* Margem opcional para visualização */
+}
+
+.input-container label {
+    margin-right: 10px; /* Espaçamento entre a label e o input */
+    font-size: 0.8em; /* Tamanho da fonte da label */
+    color: #999; /* Cor da fonte da label (desativada) */
+}
+
+.input-container input {
+    padding: 10px; /* Padding para o input */
+    font-size: 1em; /* Tamanho da fonte do input */
+    border: 1px solid #ccc; /* Borda do input */
+    border-radius: 4px; /* Bordas arredondadas no input */
+}
+
+.icon-size {
+    font-size: 1.5rem; /* Ajuste o tamanho conforme necessário */
+    width: 1.5rem; /* Ajuste o tamanho conforme necessário */
+    height: 1.5rem; /* Ajuste o tamanho conforme necessário */
+}
