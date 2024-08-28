@@ -42,7 +42,7 @@ if ($lines == 0) {
 $Subject = '[Recuperação de Senha] Recuperação de Senha';
 $Body = "
 <h1>Recuperação de Senha</h1>
-<p><a href='http://localhost:8081/TCC%20Desenvolvimento/gg/view/v-nova-senha.php?email=" . urlencode($email) . "' target='_blank'>Clique aqui para mudar a senha</a></p>
+<p><a href='http://localhost:8081/TCC_Desenvolvimento/gg/view/v-nova-senha.php?email=" . urlencode($email) . "' target='_blank'>Clique aqui para mudar a senha</a></p>
 ";
 
 require "../../../phpmail/vendor/phpmailer/phpmailer/src/PHPMailer.php";

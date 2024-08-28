@@ -16,9 +16,10 @@ class Categorias {
         $stmt = $this->pdo->prepare('
         SELECT c.ID,c.nome,c.img,c.ativo FROM categorias c
           JOIN produtos p ON c.ID = p.ID_categoria
-         WHERE p.ativo = 1 AND c.ativo = 1 
+          JOIN empresa_produtos ep ON p.ID = ep.ID_produto
+         WHERE p.ativo = 1 AND c.ativo = 1 AND ep.ID_empresa = :id_empresa
          GROUP BY p.ID_categoria');
-        $stmt->execute();
+         $stmt->execute([':id_empresa' => $this->empresa->getID_empresa()]);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return array_map(function($view) {

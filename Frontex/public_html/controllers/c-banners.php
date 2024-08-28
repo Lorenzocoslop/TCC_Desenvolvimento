@@ -40,7 +40,7 @@ class Banners {
             $carouselIndicators .= "<button type='button' data-bs-target='#carouselExampleCaptions' data-bs-slide-to='$index' class='$isActive' aria-current='true' aria-label='Slide ".($index + 1)."'></button>";
 
             $carouselItems .= "
-            <div class='carousel-item $isActive' data-bs-interval='20000'>
+            <div class='carousel-item $isActive' data-bs-interval='5000'>
                 <img src='$imagemPath' class='d-block img-fluid' alt='Imagem do Slide' style = 'width: 1200px; height: 400px'>
             </div>";
         }

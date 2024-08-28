@@ -77,7 +77,7 @@ if (isset($_SESSION['status_message'])) {
 
                 <ul class='sidebar-nav'>
                     <li class='sidebar-item'>
-                        <a href='/TCC%20Desenvolvimento/public_html/view/v-home.php' target='_blank' class='sidebar-link'>
+                        <a href='/TCC_Desenvolvimento/public_html/view/v-home.php' target='_blank' class='sidebar-link'>
                             <i class='lni lni-flag'></i>
                             <span>Meu Site</span>
                         </a>
