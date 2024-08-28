@@ -19,7 +19,7 @@ $string = "
                 $string .= "
                 <div class= 'text-start'>
                     <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#meuModal'>
-                        <i class='lni lni-plus'></i>
+                        <i class='lni lni-plus'></i> Adicionar
                     </button>
                 </div>";
             $string .=gerarModalForm('meuModal', 'Adicionar Banner');
