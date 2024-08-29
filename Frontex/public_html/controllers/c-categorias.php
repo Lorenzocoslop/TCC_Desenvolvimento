@@ -1,15 +1,18 @@
 <?php
 include_once realpath(__DIR__ . '/../model/config.empresa.php');
+include_once "../resources/assets/cores.php";
 
 class Categorias {
     private $pdo;
     private $tabela;
     private $empresa;
+    private $primaria = "#003399";
 
     public function __construct($pdo, $tabela = 'categorias') {
         $this->pdo = $pdo;
         $this->tabela = $tabela;
         $this->empresa = new SessaoEmpresa();
+        $this->primaria;
     }
 
     public function buscaCategorias() {
@@ -32,7 +35,7 @@ class Categorias {
             return "<p>Nenhuma imagem disponível para o slide.</p>";
         }
         
-        $string = '<swiper-container class="mySwiper" navigation = "true" slides-per-view="6">';
+        $string = '<swiper-container class="mySwiper" navigation = "true" slides-per-view="6" style="--swiper-navigation-color: '.$this->primaria.';">';
         $totalCards = count($dados);
     
         foreach ($dados as $index => $view) {

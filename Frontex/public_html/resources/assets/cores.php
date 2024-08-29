@@ -1,3 +1,3 @@
 <?php
-$primaria = "#003399"
+$primaria = "#003399";
 ?>
