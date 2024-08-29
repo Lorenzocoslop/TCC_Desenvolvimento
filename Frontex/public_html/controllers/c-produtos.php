@@ -8,7 +8,7 @@ class Produtos {
 
     public function __construct() {
         $this->pdo = $this->conectar();
-        $this->empresa = new Empresa();
+        $this->empresa = new SessaoEmpresa();
     }
 
     private function conectar() {

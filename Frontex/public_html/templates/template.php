@@ -15,6 +15,7 @@ require_once '../../gg/connection/config.php';
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     </head>
     <body>
         <?php
@@ -64,7 +65,7 @@ require_once '../../gg/connection/config.php';
                 <ul class="dropdown-menu dropdown-menu-end">
                     <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 1): ?>
                         <?php if ($_SESSION['nivel'] > 2): ?>
-                            <li><a class="dropdown-item" href="../../gg/view/v-home.php">Painel</a></li>
+                            <li><a class="dropdown-item" target='_blank' href="../../gg/view/v-home.php">Painel</a></li>
                         <?php endif; ?>
                         <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
                         <li><a class="dropdown-item" href="#">Minhas compras</a></li>

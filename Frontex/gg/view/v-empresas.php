@@ -2,7 +2,7 @@
 
 include_once realpath(__DIR__ . '/../../gg/connection/connection.php');
 
-$title = "GG Lojas";
+$title = "GG Empresas";
 
 include_once realpath(__DIR__ . '/../controllers/c-empresas.php');
 
@@ -12,7 +12,7 @@ include_once realpath(__DIR__ . '/../../model/form.class.php');
 $string = "
         <div class='col-12 text-center'>
             <h3>
-                Lojas
+                Empresas
             </h3>
             <div class= 'text-start'>
                 <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#meuModal'>

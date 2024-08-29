@@ -1,5 +1,5 @@
 <?php
-class Empresa{
+class SessaoEmpresa{
     private $ID_empresa;
 
     public function __construct($ID_empresa = 1) {

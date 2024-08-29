@@ -16,8 +16,8 @@ $('[id^="btn_submit_banners_"]').on('click', function(e) {
         var imagemVal = imagemField.val();
         if (imagemVal) {
             var extensao = imagemVal.split('.').pop().toLowerCase();
-            if (extensao !== 'jpg' && extensao !== 'jpeg' && extensao !== 'png') {
-                var errorMessage = "<div class='status-top-right text-center' id='status-container'><div class='status status-error'><div class='status-message'>A imagem precisa estar no formato JPG ou JPEG</div></div></div>";
+            if (extensao !== 'jpg' && extensao !== 'jpeg' && extensao !== 'png' && extensao !== 'webp') {
+                var errorMessage = "<div class='status-top-right text-center' id='status-container'><div class='status status-error'><div class='status-message'>A imagem precisa estar no formato JPG, JPEG, PNG ou WEBP</div></div></div>";
                 $('body').append(errorMessage);
                 setTimeout(function() {
                     $('#status-container').fadeOut(500, function() {
@@ -60,8 +60,8 @@ $('[id^="btn_submit_produtos_"]').on('click', function(e) {
         var imagemVal = imagemField.val();
         if (imagemVal) {
             var extensao = imagemVal.split('.').pop().toLowerCase();
-            if (extensao !== 'jpg' && extensao !== 'jpeg') {
-                var errorMessage = "<div class='status-top-right text-center' id='status-container'><div class='status status-error'><div class='status-message'>A imagem precisa estar no formato JPG ou JPEG</div></div></div>";
+            if (extensao !== 'jpg' && extensao !== 'jpeg' && extensao !== 'webp') {
+                var errorMessage = "<div class='status-top-right text-center' id='status-container'><div class='status status-error'><div class='status-message'>A imagem precisa estar no formato JPG, JPEG ou WEBP</div></div></div>";
                 $('body').append(errorMessage);
                 setTimeout(function() {
                     $('#status-container').fadeOut(500, function() {
@@ -129,8 +129,8 @@ $('[id^="btn_submit_categorias_"]').on('click', function(e) {
         var imagemVal = imagemField.val();
         if (imagemVal) {
             var extensao = imagemVal.split('.').pop().toLowerCase();
-            if (extensao !== 'jpg' && extensao !== 'jpeg') {
-                var errorMessage = "<div class='status-top-right text-center' id='status-container'><div class='status status-error'><div class='status-message'>A imagem precisa estar no formato JPG ou JPEG</div></div></div>";
+            if (extensao !== 'jpg' && extensao !== 'jpeg' && extensao !== 'webp') {
+                var errorMessage = "<div class='status-top-right text-center' id='status-container'><div class='status status-error'><div class='status-message'>A imagem precisa estar no formato JPG, JPEG ou WEBP</div></div></div>";
                 $('body').append(errorMessage);
                 setTimeout(function() {
                     $('#status-container').fadeOut(500, function() {

@@ -8,7 +8,7 @@ include_once realpath(__DIR__ . '/../controllers/c-home.php');
 
 
 $string = "
-<main class = ''>
+<main>
     <div class = 'container' data-aos='fade-up'>
         ";?>
     <?php
@@ -19,11 +19,11 @@ $string = "
         </div>
     </main>
     
-    <div class = 'text-center mt-2'>
+    <div class = 'text-center m-3'>
         <h1 data-aos='fade-up'>Categorias</h1>
     </div>
     
-    <section data-aos='fade-left' style: 'margin: 20px'>";
+    <section data-aos='fade-left' >";
 
     $categorias = new Categorias($pdo);
     $dados = $categorias->buscaCategorias();

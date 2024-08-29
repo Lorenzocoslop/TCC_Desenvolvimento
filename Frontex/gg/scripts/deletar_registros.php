@@ -25,14 +25,31 @@ if (isset($_POST['id']) && isset($_POST['tabela'])) {
         }
     }
 
-    // Prepara e executa a consulta SQL para deletar o registro
-    $stmt = $pdo->prepare("DELETE FROM $tabela WHERE id = ?");
-    if ($stmt->execute([$id])) {
+    try {
+        if($_SESSION['nivel' == 4]){
+            $stmt = $pdo->prepare("DELETE FROM $tabela WHERE id = ?");
+            $stmt->execute([$id]);
+        }
+        
+
+        // Obtém o ID da empresa_produtos associado ao ID do produto
+        $stmt = $pdo->prepare("SELECT ID FROM empresa_produtos WHERE ID_produto = ? AND ID_empresa = ?");
+        $stmt->execute([$id, $_SESSION['ID_empresa']]);
+        $registroEmpresaProduto = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($registroEmpresaProduto) {
+            $idEp = $registroEmpresaProduto['ID'];
+
+            // Deleta o registro da tabela empresa_produtos
+            $stmt = $pdo->prepare("DELETE FROM empresa_produtos WHERE ID = ?");
+            $stmt->execute([$idEp]);
+        }
+
         $_SESSION['status_message'] = 'Registro deletado com sucesso';
         $_SESSION['status_class'] = 'success';
         echo json_encode(['status' => 'success', 'redirect' => '']);
-    } else {
-        $_SESSION['status_message'] = 'Erro ao deletar o registro';
+    } catch (PDOException $e) {
+        $_SESSION['status_message'] = 'Erro ao deletar o registro: ' . $e->getMessage();
         $_SESSION['status_class'] = 'error';
         echo json_encode(['status' => 'error']);
     }

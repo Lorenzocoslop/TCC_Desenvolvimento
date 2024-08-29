@@ -9,7 +9,7 @@ class Categorias {
     public function __construct($pdo, $tabela = 'categorias') {
         $this->pdo = $pdo;
         $this->tabela = $tabela;
-        $this->empresa = new Empresa();
+        $this->empresa = new SessaoEmpresa();
     }
 
     public function buscaCategorias() {
@@ -32,7 +32,7 @@ class Categorias {
             return "<p>Nenhuma imagem disponível para o slide.</p>";
         }
         
-        $string = '<swiper-container class="mySwiper" pagination="true" navigation="true" space-between="20" slides-per-view="4">';
+        $string = '<swiper-container class="mySwiper" navigation = "true" slides-per-view="6">';
         $totalCards = count($dados);
     
         foreach ($dados as $index => $view) {
@@ -42,10 +42,12 @@ class Categorias {
             $string .= "
              <swiper-slide>
                 <div class='image-overlay-container' style='position: relative; height: 200px;'>
-                    <img src='$imagemPath' class='card-img-top img-fluid' style='height: 200px; width: 300px; object-fit: cover;'>
-                    <div class='image-overlay d-flex flex-column' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);'>
-                        <h5 class='text-white text-center mt-auto'>$nome</h5>
-                    </div>
+                    <a href='#'>
+                        <img src='$imagemPath' class='card-img-top img-fluid' style='height: 200px; width: 300px; object-fit: cover;'>
+                        <div  class='image-overlay d-flex flex-column' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);'>
+                            <h5 class='text-white text-center mt-auto'>$nome</h5>
+                        </div>
+                    </a>
                 </div>
              </swiper-slide>";
     

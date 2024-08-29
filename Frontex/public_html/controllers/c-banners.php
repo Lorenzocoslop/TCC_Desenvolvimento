@@ -1,9 +1,6 @@
 <?php
 include_once realpath(__DIR__ . '/../model/config.empresa.php');
 
-
-
-
 class Banners {
     private $pdo;
     private $tabela;
@@ -12,7 +9,7 @@ class Banners {
     public function __construct($pdo, $tabela = 'banners') {
         $this->pdo = $pdo;
         $this->tabela = $tabela;
-        $this->empresa = new Empresa();
+        $this->empresa = new SessaoEmpresa();
     }
 
     public function buscarBannersAtivos() {

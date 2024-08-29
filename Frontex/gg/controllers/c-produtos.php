@@ -1,5 +1,6 @@
 <?php
 include_once realpath(__DIR__ . '/../connection/connection.php');
+include_once '../../model/empresa.class.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -138,6 +139,7 @@ if (!empty($_POST)) {
     $imagem = $_FILES['img'];
     $imagem_sem_imagem = '../../image/produto-sem-imagem.jpg';
     $codigobarra = $_POST['codigobarra'];
+    $ID_empresa = $_POST['ID_empresa'] ?? $_SESSION['ID_empresa'];
     $preco_venda = formatarPrecoParaSalvar($_POST['preco_venda']);
     $preco_promocao = formatarPrecoParaSalvar($_POST['preco_promocao'] ?? 0);
     $tem_codigo = $_POST['tem_codigo'] ?? 0;
@@ -164,7 +166,7 @@ if (!empty($_POST)) {
                     $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, img = ?, descricao = ?, codigobarra = ?, preco_venda = ?, preco_promocao = ?, tem_codigo = ? WHERE id = ?");
                     $stmt->execute([$nome, $baseUrl, $descricao, $codigobarra, $preco_venda, $preco_promocao, $tem_codigo, $id]);
                 } else {
-                    $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, img = ?, descricao = ?, preco_venda = ?, preco_promocao = ?, tem_codigo = ? WHERE id = ?");
+                    $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, img = ?, descricao = ?, preco_venda = ?, preco_promocao = ?, tem_codigo = ?,  WHERE id = ?");
                     $stmt->execute([$nome, $baseUrl, $descricao, $preco_venda, $preco_promocao, $tem_codigo, $id]);
                 }
 
@@ -202,7 +204,7 @@ if (!empty($_POST)) {
                     $id_produto = $row['ID'];
 
                     $stmt = $pdo->prepare("INSERT INTO empresa_produtos (ID_produto,ID_empresa) VALUES (?, ?)");
-                    $stmt->execute([$id_produto,$_SESSION['ID_empresa']]);
+                    $stmt->execute([$id_produto,$ID_empresa]);
                 } else {
                     $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao, preco_venda, preco_promocao, tem_codigo) VALUES (?, ?, ?, ?, ?, ?)");
                     $stmt->execute([$nome, $baseUrl, $descricao, $preco_venda, $preco_promocao, $tem_codigo]);
@@ -212,7 +214,7 @@ if (!empty($_POST)) {
                     $id_produto = $row['ID'];
                     
                     $stmt = $pdo->prepare("INSERT INTO empresa_produtos (ID_produto,ID_empresa) VALUES (?, ?)");
-                    $stmt->execute([$id_produto,$_SESSION['ID_empresa']]);
+                    $stmt->execute([$id_produto,$ID_empresa]);
                 }
 
                 echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Produto inserido com sucesso </div></div></div>";
@@ -223,9 +225,23 @@ if (!empty($_POST)) {
             if($_POST['tem_codigo'] != 0){
                 $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao, codigobarra, preco_venda, preco_promocao, tem_codigo) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$nome, $imagem_sem_imagem, $descricao, $codigobarra, $preco_venda, $preco_promocao, $tem_codigo]);
+                
+                $stmt = $pdo->query("SELECT LAST_INSERT_ID() AS ID");
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                $id_produto = $row['ID'];
+
+                $stmt = $pdo->prepare("INSERT INTO empresa_produtos (ID_produto,ID_empresa) VALUES (?, ?)");
+                $stmt->execute([$id_produto,$ID_empresa]);
             } else {
                 $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao, preco_venda, preco_promocao, tem_codigo) VALUES (?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$nome, $imagem_sem_imagem, $descricao, $preco_venda, $preco_promocao, $tem_codigo]);
+
+                $stmt = $pdo->query("SELECT LAST_INSERT_ID() AS ID");
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                $id_produto = $row['ID'];
+
+                $stmt = $pdo->prepare("INSERT INTO empresa_produtos (ID_produto,ID_empresa) VALUES (?, ?)");
+                $stmt->execute([$id_produto,$ID_empresa]);
             }
 
             echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Produto inserido com sucesso </div></div></div>";
@@ -236,9 +252,9 @@ if (!empty($_POST)) {
 }
 
 $stmt = $pdo->prepare('
-    SELECT p.ID,p.nome,p.img,p.descricao,p.codigobarra,p.preco_venda,p.preco_promocao,p.tem_codigo,p.ativo FROM '. $TABELA .' p
+    SELECT p.ID,p.nome,p.img,p.descricao,p.codigobarra,p.preco_venda,p.preco_promocao,p.tem_codigo,p.ativo, ep.ID_empresa FROM '. $TABELA .' p
       JOIN empresa_produtos ep ON p.ID = ep.ID_produto
-     WHERE ID_empresa = '.$_SESSION['ID_empresa'].'');
+     WHERE ep.ID_empresa = '.$_SESSION['ID_empresa'].'');
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -336,10 +352,11 @@ function gerarModaisTabela($dados) {
         $imagemPath = $view->img;
         $codigobarra = $view->codigobarra;
         $tem_codigo = $view->tem_codigo;
+        $ID_empresa = $view->ID_empresa;
         $preco_venda = formatarPrecoParaTelaPromocao($view->preco_venda);
         $preco_promocao = formatarPrecoParaTelaPromocao($view->preco_promocao);
 
-        $modais .= gerarModalForm("formModal$id", "Alterar Produto", $nome, $descricao, $imagemPath, $preco_venda, $preco_promocao, $codigobarra, $tem_codigo,$id);
+        $modais .= gerarModalForm("formModal$id", "Alterar Produto", $nome, $descricao, $imagemPath, $preco_venda, $preco_promocao, $codigobarra, $tem_codigo, $ID_empresa, $id);
         
         $modais .= gerarModalDelete($view); 
     }
@@ -349,7 +366,17 @@ function gerarModaisTabela($dados) {
 ?>
 
 <?php
-function gerarModalForm($idModal, $titulo, $nome = '', $descricao = '', $imagemPath = '', $preco_venda = '', $preco_promocao = '', $codigobarra = '', $tem_codigo = 0, $id ='') {
+function gerarModalForm($idModal, $titulo, $nome = '', $descricao = '', $imagemPath = '', $preco_venda = '', $preco_promocao = '', $codigobarra = '', $tem_codigo = 0, $ID_empresa = NULL, $id ='') {
+
+    global $pdo;
+
+    $empresas = new Empresa($pdo);
+    $listaempresas = $empresas->searchEmpresas();
+
+    $options = ['0' => 'Selecione'];
+    foreach ($listaempresas as $empresa) {
+        $options[$empresa->ID] = $empresa->nome;
+    }
 
     $tem_codigo = (int) $tem_codigo;
     $checked2 = $tem_codigo === 0 ? 'checked' : '';
@@ -368,14 +395,36 @@ function gerarModalForm($idModal, $titulo, $nome = '', $descricao = '', $imagemP
                     <div class='modal-body row'>
                     <input type='hidden' name='id' id = 'idhidden' value='$id'>
                         "; 
+                        if (isset($_SESSION['logged']) && $_SESSION['nivel'] >= 2 && $_SESSION['nivel'] < 4){
                         $string.= Form::InputText([
-                                    'size' => 9,
-                                    'name' => 'nome',
-                                    'label' => 'Nome',
-                                    'value' => $nome,
-                                    'required' => true,
-                                ]);
-                        
+                            'size' => 12,
+                            'name' => 'nome',
+                            'label' => 'Nome',
+                            'value' => $nome,
+                            'required' => true,
+                        ]);
+                        }
+
+                        if (isset($_SESSION['logged']) && $_SESSION['nivel'] == 4){
+                            $string.= Form::InputText([
+                                'size' => 6,
+                                'name' => 'nome',
+                                'label' => 'Nome',
+                                'value' => $nome,
+                                'required' => true,
+                            ]);
+                            }
+
+                        if (isset($_SESSION['logged']) && $_SESSION['nivel'] == 4){
+                            $string .= Form::select([
+                                'size' => 6,
+                                'name' => 'ID_empresa',
+                                'label' => 'Empresa',
+                                'options' => $options,
+                                'value' => $ID_empresa,
+                                'required' => true,
+                            ]);
+                        }
                         $string.= Form::InputFile([
                                     'size' => 12,
                                     'name' => 'img',

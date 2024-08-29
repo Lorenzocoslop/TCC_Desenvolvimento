@@ -1,6 +1,7 @@
 <?php
 include_once realpath(__DIR__ . '/../connection/connection.php');
 include_once realpath(__DIR__ . '/../../model/path.php');
+include_once '../../model/empresa.class.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -106,6 +107,7 @@ if (isset($_GET['delete'])) {
 if (!empty($_POST)) {
     $nome = $_POST['nome'];
     $descricao = $_POST['descricao'];
+    $ID_empresa = $_POST['ID_empresa'] ?? $_SESSION['ID_empresa'];
     $imagem = $_FILES['img'];
     $id = $_POST['id'] ?? null;
     
@@ -125,15 +127,15 @@ if (!empty($_POST)) {
                     unlink($imagemAntiga);
                 }
 
-                $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, img = ?, descricao = ? WHERE id = ?");
-                $stmt->execute([$nome, $baseUrl, $descricao, $id]);
+                $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, img = ?, descricao = ?, ID_empresa = ? WHERE id = ?");
+                $stmt->execute([$nome, $baseUrl, $descricao, $ID_empresa, $id]);
                 echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Banner atualizado com sucesso </div></div></div>";
             } else {
                 echo "Erro ao salvar o arquivo.";
             }
         } else {
-            $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, descricao = ? WHERE id = ?");
-            $stmt->execute([$nome, $descricao, $id]);
+            $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, descricao = ?, ID_empresa = ? WHERE id = ?");
+            $stmt->execute([$nome, $descricao, $ID_empresa, $id]);
             echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Banner atualizado com sucesso </div></div></div>";
         }
 
@@ -145,14 +147,14 @@ if (!empty($_POST)) {
             $baseUrl = $diretorio . uniqid() . '_' . basename($imagem['name']);
             
             if (move_uploaded_file($imagem['tmp_name'], $baseUrl)) {
-                $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao) VALUES (?, ?, ?)");
-                $stmt->execute([$nome, $baseUrl, $descricao]);
+                $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao, ID_empresa) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$nome, $baseUrl, $descricao,$ID_empresa]);
                 echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Banner inserido com sucesso </div></div></div>";
             } else {
                 echo "Erro ao salvar o arquivo.";
             }
         } else {
-            $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, descricao) VALUES (?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, descricao, ID_empresa) VALUES (?, ?, ?)");
             $stmt->execute([$nome, $descricao]);
             echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Banner inserido com sucesso </div></div></div>";
         }
@@ -161,7 +163,7 @@ if (!empty($_POST)) {
     }
 }
 
-$stmt = $pdo->prepare('SELECT b.ID,b.nome,b.img,b.descricao,b.ativo FROM '. $TABELA .' b
+$stmt = $pdo->prepare('SELECT b.ID,b.nome,b.ID_empresa,b.img,b.descricao,b.ativo FROM '. $TABELA .' b
                          JOIN empresas e ON b.ID_empresa = e.ID
                         WHERE b.ID_empresa = '.$_SESSION['ID_empresa'].'');
 $stmt->execute();
@@ -238,9 +240,11 @@ function gerarModaisTabela($dados) {
         $id = $view->ID;
         $nome = $view->nome; 
         $descricao = $view->descricao;
+        $ID_empresa = $view->ID_empresa;
         $imagemPath = $view->img;
 
-        $modais .= gerarModalForm("formModal$id", "Alterar Banner", $nome, $descricao, $imagemPath, $id);
+        // Passa os dados corretamente para o modal
+        $modais .= gerarModalForm("formModal$id", "Alterar Banner", $nome, $descricao, $ID_empresa, $imagemPath, $id);
         $modais .= gerarModalDelete($view); 
     }
     
@@ -249,57 +253,93 @@ function gerarModaisTabela($dados) {
 ?>
 
 <?php
-function gerarModalForm($idModal, $titulo, $nome = '', $descricao = '', $imagemPath = '', $id= '') {
+function gerarModalForm($idModal, $titulo, $nome = '', $descricao = '', $ID_empresa = '', $imagemPath = '', $id= '') {
+    global $pdo;
+
+    $empresas = new Empresa($pdo);
+    $listaempresas = $empresas->searchEmpresas();
+
+    $options = ['0' => 'Selecione'];
+    foreach ($listaempresas as $empresa) {
+        $options[$empresa->ID] = $empresa->nome;
+    }
+
 
     $string = "
-<div class='modal fade' id='$idModal' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='{$idModal}Label' aria-hidden='true'>
-    <form method='post' enctype='multipart/form-data'> 
-    <input type='hidden' name='id' value='$id'>  
-        <div class='modal-dialog'>
-            <div class='modal-content'>
-                <div class='modal-header bg-secondary text-white text-center'>
-                    <h1 class='modal-title fs-5 w-100 text-center' id='{$idModal}Label'>$titulo</h1>
-                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                </div>
-                <div class='modal-body'>
-                    <div class='row'>
-                    
-                        " . Form::InputText([
-                            'size' => 12,
-                            'name' => 'nome',
-                            'label' => 'Nome',
-                            'value' => $nome,
-                            'required' => true,
-                        ]); $string .= Form::InputFile([
-                            'size' => 12,
-                            'name' => 'img',
-                            'label' => 'Imagem',
-                            'id' => 'img',
-                            'attributes' => 'onchange="previewImage()"',
-                        ]) . "
+    <div class='modal fade' id='$idModal' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='{$idModal}Label' aria-hidden='true'>
+        <form method='post' enctype='multipart/form-data'> 
+        <input type='hidden' name='id' value='$id'>  
+            <div class='modal-dialog'>
+                <div class='modal-content'>
+                    <div class='modal-header bg-secondary text-white text-center'>
+                        <h1 class='modal-title fs-5 w-100 text-center' id='{$idModal}Label'>$titulo</h1>
+                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                    </div>
+                    <div class='modal-body'>
+                        <div class='row'>
                         
-                        <div class='mb-3 text-start d-flex justify-content-center'>
-                            <img id='imgPreview' class = 'img-fluid'src='$imagemPath' alt='Preview da Imagem' style='display: " . ($imagemPath ? "block" : "none") . "; max-width: 100%; height: auto;'>
+                            ";
+                            if (isset($_SESSION['logged']) && $_SESSION['nivel'] >= 2 && $_SESSION['nivel'] < 4){
+                            $string.= Form::InputText([
+                                'size' => 12,
+                                'name' => 'nome',
+                                'label' => 'Nome',
+                                'value' => $nome,
+                                'required' => true,
+                            ]);
+                            }
+    
+                            if (isset($_SESSION['logged']) && $_SESSION['nivel'] == 4){
+                                $string.= Form::InputText([
+                                    'size' => 6,
+                                    'name' => 'nome',
+                                    'label' => 'Nome',
+                                    'value' => $nome,
+                                    'required' => true,
+                                ]);
+                                } 
+
+                            if (isset($_SESSION['logged']) && $_SESSION['nivel'] == 4){
+                                $string .= Form::select([
+                                    'size' => 6,
+                                    'name' => 'ID_empresa',
+                                    'label' => 'Empresa',
+                                    'options' => $options,
+                                    'value' => $ID_empresa,
+                                    'required' => true,
+                                ]);
+                            }
+
+                            $string .= Form::InputFile([
+                                'size' => 12,
+                                'name' => 'img',
+                                'label' => 'Imagem',
+                                'id' => 'img',
+                                'attributes' => 'onchange="previewImage()"',
+                            ]) . "
+                            
+                            <div class='mb-3 text-start d-flex justify-content-center'>
+                                <img id='imgPreview' class = 'img-fluid'src='$imagemPath' alt='Preview da Imagem' style='display: " . ($imagemPath ? "block" : "none") . "; max-width: 100%; height: auto;'>
+                            </div>
+                            
+                            " . Form::textarea([
+                                'size' => 12,
+                                'name' => 'descricao',
+                                'label' => 'Descricao',
+                                'attributes' => 'style="height:100%"',
+                                'value' => $descricao,
+                            ]) . "
                         </div>
-                        
-                        " . Form::textarea([
-                            'size' => 12,
-                            'name' => 'descricao',
-                            'label' => 'Descricao',
-                            'attributes' => 'style="height:100%"',
-                            'value' => $descricao,
-                        ]) . "
+                    </div>
+                    <div class='modal-footer'>
+                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>
+                        <button type='submit' class='btn btn-primary' id='btn_submit_banners_$id' name='enviar'>Salvar</button>
                     </div>
                 </div>
-                <div class='modal-footer'>
-                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>
-                    <button type='submit' class='btn btn-primary' id='btn_submit_banners_$id' name='enviar'>Salvar</button>
-                </div>
             </div>
-        </div>
-    </form>
-</div>
-";
+        </form>
+    </div>
+    ";
     return $string;
 }
 
