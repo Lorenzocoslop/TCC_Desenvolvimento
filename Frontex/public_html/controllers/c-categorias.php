@@ -1,23 +1,23 @@
 <?php
 include_once realpath(__DIR__ . '/../model/config.empresa.php');
-include_once "../resources/assets/cores.php";
+include_once "../resources/classes/class.cores.php";
 
 class Categorias {
     private $pdo;
     private $tabela;
     private $empresa;
-    private $primaria = "#003399";
+    private $primaria;
 
     public function __construct($pdo, $tabela = 'categorias') {
         $this->pdo = $pdo;
         $this->tabela = $tabela;
         $this->empresa = new SessaoEmpresa();
-        $this->primaria;
+        $this->primaria = Cor::definirCores();
     }
 
     public function buscaCategorias() {
         $stmt = $this->pdo->prepare('
-        SELECT c.ID,c.nome,c.img,c.ativo FROM categorias c
+        SELECT c.ID,c.nome,c.img,c.ativo FROM '.$this->tabela.' c
           JOIN produtos p ON c.ID = p.ID_categoria
           JOIN empresa_produtos ep ON p.ID = ep.ID_produto
          WHERE p.ativo = 1 AND c.ativo = 1 AND ep.ID_empresa = :id_empresa
