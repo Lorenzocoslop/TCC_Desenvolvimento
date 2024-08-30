@@ -26,10 +26,11 @@ if (isset($_POST['id']) && isset($_POST['tabela'])) {
     }
 
     try {
-        if($_SESSION['nivel' == 4]){
-            $stmt = $pdo->prepare("DELETE FROM $tabela WHERE id = ?");
-            $stmt->execute([$id]);
-        }
+
+
+
+        $stmt = $pdo->prepare("DELETE FROM $tabela WHERE id = ?");
+        $stmt->execute([$id]);
         
 
         // Obtém o ID da empresa_produtos associado ao ID do produto

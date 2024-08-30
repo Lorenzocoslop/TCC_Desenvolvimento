@@ -16,11 +16,11 @@ $(document).ready(function() {
     }, 5000);
 
     //MOSTRA A SENHA
-    $( "#mostarsenha" ).mousedown(function() {
+    $( "#mostrarsenha" ).mousedown(function() {
         $("#senha").attr("type", "text");
     });
 
-    $( "#mostarsenha" ).mouseup(function() {
+    $( "#mostrarsenha" ).mouseup(function() {
         $("#senha").attr("type", "password");
     });
 

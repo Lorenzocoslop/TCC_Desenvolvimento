@@ -327,12 +327,14 @@ function gerarTbody($dados) {
         <td class='text-end' id='row_ativo'>
             <button type='button' class='btn' id='ativo_$id' value = '$ativo'>
                 <i class='lni lni-checkmark-circle text-success'></i>
-            </button>
-            <button type='button' class='btn btn-outline-danger' data-bs-toggle='modal' data-bs-target='#staticBackdrop$id'>
-                <i class='lni lni-trash-can'></i>
-            </button>
-        </td>"; 
-        $tbody .= "</tr>";
+        ";
+        $tbody .= "
+        </button>
+        <button type='button' class='btn btn-outline-danger' data-bs-toggle='modal' data-bs-target='#staticBackdrop$id'>
+            <i class='lni lni-trash-can'></i>
+        </button>";
+
+        $tbody .= "</td></tr>";
     }
     
     $tbody .= "</tbody>";

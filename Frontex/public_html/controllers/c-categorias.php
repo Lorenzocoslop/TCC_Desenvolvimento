@@ -1,6 +1,6 @@
 <?php
 include_once realpath(__DIR__ . '/../model/config.empresa.php');
-include_once "../resources/classes/class.cores.php";
+include_once "../../model/utils.class.php";
 
 class Categorias {
     private $pdo;
@@ -12,7 +12,7 @@ class Categorias {
         $this->pdo = $pdo;
         $this->tabela = $tabela;
         $this->empresa = new SessaoEmpresa();
-        $this->primaria = Cor::definirCores();
+        $this->primaria = Utils::definirCores();
     }
 
     public function buscaCategorias() {

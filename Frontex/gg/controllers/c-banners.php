@@ -217,13 +217,17 @@ function gerarTbody($dados) {
         $tbody .= "<td class='text-end' id='row_ativo'>
             <button type='button' class='btn' id='ativo_$id' value = '$ativo'>
                 <i class='lni lni-checkmark-circle text-success'></i>
-            </button>
+            </button>";
 
-            <button type='button' class='btn btn-outline-danger' data-bs-toggle='modal' data-bs-target='#staticBackdrop$id'>
-                <i class='lni lni-trash-can w-100 h-100'></i>
+            if($_SESSION['nivel'] > 3){
+            $tbody .= "
             </button>
-        </td>"; 
-        $tbody .= "</tr>";
+            <button type='button' class='btn btn-outline-danger' data-bs-toggle='modal' data-bs-target='#staticBackdrop$id'>
+                <i class='lni lni-trash-can'></i>
+            </button>";
+        }
+        
+        $tbody .= "</td></tr>";
     }
     
     $tbody .= "</tbody>";

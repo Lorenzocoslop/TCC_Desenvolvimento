@@ -19,7 +19,7 @@ $string = "
         </div>
     </main>
     
-    <div class = 'text-center m-3'>
+    <div class = 'text-center m-5'>
         <h1 data-aos='fade-up'>Categorias</h1>
     </div>
     
@@ -33,7 +33,7 @@ $string = "
     </section>";
 
     $string .= "
-    <div class = 'text-center mt-2'>
+    <div class = 'text-center m-5'>
         <h1 data-aos='fade-up'>Produtos</h1>
     </div>
 

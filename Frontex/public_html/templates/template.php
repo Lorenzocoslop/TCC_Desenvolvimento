@@ -1,7 +1,7 @@
 <?php
-include_once "../resources/classes/class.cores.php";
+include_once "../../model/utils.class.php";
 require_once '../../gg/connection/config.php'; 
-$primaria = Cor::definirCores();
+$primaria = Utils::definirCores();
 ?>
 
 <!DOCTYPE html>
