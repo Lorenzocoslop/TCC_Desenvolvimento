@@ -39,6 +39,20 @@
             $primaria = "#003399";
             return $primaria;
        } 
+
+       public static function parseMoney($valor) {
+            $valorLimpo = preg_replace('/[^\d,\.]/', '', $valor);
+            
+            $valorLimpo = str_replace(',', '.', $valorLimpo);
+            
+            return $valorLimpo;
+        }
+        public static function parsePhone($telefone) {
+
+            $telefoneLimpo = preg_replace('/\D/', '', $telefone);
+            
+            return $telefoneLimpo;
+        }
     }
 
 ?>

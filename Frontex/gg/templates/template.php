@@ -77,9 +77,16 @@ if (isset($_SESSION['status_message'])) {
 
                 <ul class='sidebar-nav'>
                     <li class='sidebar-item'>
-                        <a href='/TCC_Desenvolvimento/public_html/view/v-home.php' target='_blank' class='sidebar-link'>
-                            <i class='lni lni-flag'></i>
+                        <a href='../../public_html/view/v-home.php' target='_blank' class='sidebar-link'>
+                            <i class="lni lni-world"></i>
                             <span>Meu Site</span>
+                        </a>
+                    </li>
+
+                    <li class='sidebar-item'>
+                        <a href='../view/v-home.php' class='sidebar-link'>
+                            <i class='lni lni-home'></i>
+                            <span>In&iacute;cio</span>
                         </a>
                     </li>
 
@@ -95,6 +102,13 @@ if (isset($_SESSION['status_message'])) {
                         <a href='v-produtos.php' class='sidebar-link'>
                             <i class='lni lni-shopping-basket'></i>
                             <span>Produtos</span>
+                        </a>
+                    </li>
+
+                    <li class='sidebar-item'>
+                        <a href='v-cupons.php' class='sidebar-link'>
+                            <i class="lni lni-ticket"></i>
+                            <span>Cupons</span>
                         </a>
                     </li>
 
@@ -117,7 +131,7 @@ if (isset($_SESSION['status_message'])) {
                     <?php if (isset($_SESSION['logged']) && $_SESSION['nivel'] == 4):?>
                     <li class='sidebar-item'>
                         <a href='v-empresas.php' class='sidebar-link'>
-                            <i class="lni lni-restaurant"></i>
+                            <i class="lni lni-blackboard"></i>
                             <span>Empresas</span>
                         </a>
                     </li>
@@ -138,9 +152,9 @@ if (isset($_SESSION['status_message'])) {
 
                     <?php if (isset($_SESSION['logged']) && $_SESSION['nivel'] >= 3):?>
                     <li class='sidebar-item'>
-                        <a href='v-banners.php' class='sidebar-link'>
-                            <i class="lni lni-user"></i>
-                            <span>Perfil</span>
+                        <a href='v-configuracoes.php' class='sidebar-link'>
+                            <i class="lni lni-restaurant"></i>
+                            <span>Configura&ccedil;&otilde;es</span>
                         </a>
                     </li>
                     <?php endif; ?>
@@ -173,6 +187,11 @@ if (isset($_SESSION['status_message'])) {
         <script src="../../js/scripts_empresas.js"></script>
         <script src="../../js/ajax_ativo.js"></script>
         <script src="../../js/ajax_delete.js"></script>
+        <script src="../../js/validacao.js"></script>
+    <?php endif; ?>
+
+    <?php if ($pagina_atual === 'v-configuracoes'): ?>
+        <script src="../../js/scripts_empresas.js"></script>
         <script src="../../js/validacao.js"></script>
     <?php endif; ?>
 
