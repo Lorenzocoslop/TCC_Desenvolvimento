@@ -114,18 +114,15 @@ if (isset($_GET['delete'])) {
 }
 
 function formatarPrecoParaSalvar($valor) {
-    // Remove espaços
     $valor = trim($valor);
 
-    // Remove tudo que não seja número, vírgula ou ponto
     $valor = preg_replace('/[^\d,\.]/', '', $valor);
 
-    // Se existir tanto ponto quanto vírgula no valor, assumimos que o ponto é o separador de milhar e removemos ele
     if (strpos($valor, '.') !== false && strpos($valor, ',') !== false) {
-        $valor = str_replace('.', '', $valor); // Remove pontos (separador de milhar)
-        $valor = str_replace(',', '.', $valor); // Substitui vírgula por ponto (separador decimal)
+        $valor = str_replace('.', '', $valor); 
+        $valor = str_replace(',', '.', $valor); 
     } elseif (strpos($valor, ',') !== false) {
-        // Se só houver vírgula, substituímos por ponto para o formato decimal
+
         $valor = str_replace(',', '.', $valor);
     }
 
@@ -251,10 +248,17 @@ if (!empty($_POST)) {
     }
 }
 
-$stmt = $pdo->prepare('
+if($_SESSION['ID_empresa'] == 0){
+    $stmt = $pdo->prepare('
+    SELECT p.ID,p.nome,p.img,p.descricao,p.codigobarra,p.preco_venda,p.preco_promocao,p.tem_codigo,p.ativo, ep.ID_empresa FROM '. $TABELA .' p
+      JOIN empresa_produtos ep ON p.ID = ep.ID_produto');
+} else {
+    $stmt = $pdo->prepare('
     SELECT p.ID,p.nome,p.img,p.descricao,p.codigobarra,p.preco_venda,p.preco_promocao,p.tem_codigo,p.ativo, ep.ID_empresa FROM '. $TABELA .' p
       JOIN empresa_produtos ep ON p.ID = ep.ID_produto
      WHERE ep.ID_empresa = '.$_SESSION['ID_empresa'].'');
+    }
+
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

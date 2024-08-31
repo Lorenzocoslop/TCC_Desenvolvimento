@@ -150,7 +150,7 @@ if (isset($_SESSION['status_message'])) {
                     </li>
                     <?php endif; ?>
 
-                    <?php if (isset($_SESSION['logged']) && $_SESSION['nivel'] >= 3):?>
+                    <?php if (isset($_SESSION['logged']) && $_SESSION['nivel'] == 3):?>
                     <li class='sidebar-item'>
                         <a href='v-configuracoes.php' class='sidebar-link'>
                             <i class="lni lni-restaurant"></i>
@@ -185,6 +185,13 @@ if (isset($_SESSION['status_message'])) {
     
     <?php if ($pagina_atual === 'v-empresas'): ?>
         <script src="../../js/scripts_empresas.js"></script>
+        <script src="../../js/ajax_ativo.js"></script>
+        <script src="../../js/ajax_delete.js"></script>
+        <script src="../../js/validacao.js"></script>
+    <?php endif; ?>
+
+    <?php if ($pagina_atual === 'v-cupons'): ?>
+        <script src="../../js/scripts_cupons.js"></script>
         <script src="../../js/ajax_ativo.js"></script>
         <script src="../../js/ajax_delete.js"></script>
         <script src="../../js/validacao.js"></script>

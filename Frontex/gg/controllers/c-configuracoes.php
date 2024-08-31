@@ -110,7 +110,7 @@ function gerarForm($nome = '', $cnpj = '', $telefone = '', $whatsapp = '', $inst
             $string .= Form::inputMoney([
                 'size' => 12,
                 'name' => 'valor_minimo',
-                'label' => 'Valor M&iacute;nimo',
+                'label' => 'Valor M&iacute;nimo de Pedido',
                 'value' => $valor_minimo,
             ]); 
 

@@ -163,9 +163,15 @@ if (!empty($_POST)) {
     }
 }
 
+if($_SESSION['ID_empresa'] == 0){
+    $stmt = $pdo->prepare('SELECT b.ID,b.nome,b.ID_empresa,b.img,b.descricao,b.ativo FROM '. $TABELA .' b
+                         JOIN empresas e ON b.ID_empresa = e.ID');
+} else {
 $stmt = $pdo->prepare('SELECT b.ID,b.nome,b.ID_empresa,b.img,b.descricao,b.ativo FROM '. $TABELA .' b
                          JOIN empresas e ON b.ID_empresa = e.ID
                         WHERE b.ID_empresa = '.$_SESSION['ID_empresa'].'');
+    }
+
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

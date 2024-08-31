@@ -1,42 +1,48 @@
 <?php
 include_once realpath(__DIR__ . '/../connection/connection.php');
 include_once realpath(__DIR__ . '/../../model/path.php');
+include_once realpath(__DIR__ . '/../../model/utils.class.php');
+include_once '../../model/empresa.class.php';
 
-$TABELA = 'empresas';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$TABELA = 'cupons';
 $deletado = false;
 $alterado = false;
 $idAlterar = null;
-
-function exibirMensagem($mensagem, $tipo = 'error') {
-    echo "<div class='status-top-right text-center' id='status-container'><div class='status status-$tipo'><div class='status-message'>$mensagem</div></div></div>";
-}
 
 if (isset($_GET['alterar'])) {
     $idAlterar = (int)$_GET['alterar'];
 }
 
-function limparCNPJ($cnpj) {
-    return preg_replace('/\D/', '', $cnpj);
-}
-
 if (!empty($_POST)) {
     $nome = $_POST['nome'];
-    $cnpj = limparCNPJ($_POST['cnpj']);
+    $dt_fim = $_POST['dt_fim'];
+    $ID_empresa = $_POST['ID_empresa'];
+    $quant_usos = $_POST['quant_usos'];
     $id = $_POST['id'] ?? null;
     
     
     if ($id) {
-        $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, cnpj = ? WHERE id = ?");
-        $stmt->execute([$nome, $cnpj, $id]);
-        echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Empresa atualizada com sucesso </div></div></div>";
+        $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, dt_fim = ?, ID_empresa = ?, quant_usos = ? WHERE id = ?");
+        $stmt->execute([$nome, $dt_fim, $ID_empresa, $quant_usos, $id]);
+        echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Cupom atualizado com sucesso </div></div></div>";
     } else {
-            $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, cnpj) VALUES (?, ?)");
-            $stmt->execute([$nome, $cnpj]);
-            echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Empresa inserida com sucesso </div></div></div>";
+            $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, dt_fim, ID_empresa, quant_usos) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$nome, $dt_fim, $ID_empresa, $quant_usos]);
+            echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Cupom inserido com sucesso </div></div></div>";
     }
 }
 
-$stmt = $pdo->prepare('SELECT * FROM ' . $TABELA);
+if($_SESSION['ID_empresa'] == 0){
+    $stmt = $pdo->prepare('SELECT * FROM ' . $TABELA);
+} else {
+    $stmt = $pdo->prepare('SELECT * FROM ' . $TABELA . ' WHERE ID_empresa = '. $_SESSION['ID_empresa']);
+    }
+
+
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -69,7 +75,7 @@ function gerarThead($dados)
 $dados = 
 [
     'Nome',
-    'CNPJ',
+    'Data Fim',
 ];
 ?>
 
@@ -80,19 +86,20 @@ function gerarTbody($dados) {
     foreach ($dados as $view) {
         $id = $view->ID;
         $nome = $view->nome; 
-        $cnpj = $view->cnpj;
+        $dt_fim = $view->dt_fim;
+        $data = new DateTime($dt_fim);
         $ativo = $view->ativo;
 
-        $tbody .= "<tr>";
-        $tbody .= "<td scope='row' class='text-start'>
+        $tbody .= "<tr data-id='$id'>";
+        $tbody .= "<td scope='row' class='text-center'>
             <a href='#formModal$id' class = 'text-dark' data-bs-toggle='modal' data-bs-target='#formModal$id'>$id - $nome <i class='lni lni-pencil'></i></a>
         </td>";
         $tbody .= "
-        <td scope='row' id= 'row_cnpj' class='text-center cnpj'>
-            $cnpj
+        <td scope='row' class='text-center' id='dataExpiracao_$id'>
+            ". date_format($data,'d/m/Y') ."
         </td>";
         $tbody .= "<td class='text-end' id='row_ativo'>
-            <button type='button' class='btn' id='ativo_$id' value = '$ativo'>
+            <button type='button' class='btn ativo' id='ativo_$id' value = '$ativo'>
                 <i class='lni lni-checkmark-circle text-success'></i>
             </button>
 
@@ -116,9 +123,12 @@ function gerarModaisTabela($dados) {
     foreach ($dados as $view) {
         $id = $view->ID;
         $nome = $view->nome; 
-        $cnpj = $view->cnpj;
+        $dt_fim = $view->dt_fim;
+        $data = new DateTime($dt_fim);
+        $quant_usos = $view->quant_usos;
+        $ID_empresa = $view->ID_empresa;
 
-        $modais .= gerarModalForm("formModal$id", "Alterar Empresa", $nome, $cnpj, $id);
+        $modais .= gerarModalForm("formModal$id", "Alterar Empresa", $nome, $dt_fim, $ID_empresa, $quant_usos, $id);
         $modais .= gerarModalDelete($view); 
     }
     
@@ -127,7 +137,16 @@ function gerarModaisTabela($dados) {
 ?>
 
 <?php
-function gerarModalForm($idModal, $titulo, $nome = '', $cnpj = '', $id= '') {
+function gerarModalForm($idModal, $titulo, $nome = '', $dt_fim = '', $ID_empresa = '', $quant_usos ='', $id= '') {
+    global $pdo;
+
+    $empresas = new Empresa($pdo);
+    $listaempresas = $empresas->searchEmpresas();
+
+    $options = ['0' => 'Selecione'];
+    foreach ($listaempresas as $empresa) {
+        $options[$empresa->ID] = $empresa->nome;
+    }
 
     $string = "
 <div class='modal fade' id='$idModal' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='{$idModal}Label' aria-hidden='true'>
@@ -143,6 +162,7 @@ function gerarModalForm($idModal, $titulo, $nome = '', $cnpj = '', $id= '') {
                     <div class='row'>
                     
                         "; 
+                        if($_SESSION['nivel'] < 4){
                         $string .= Form::InputText([
                             'size' => 12,
                             'name' => 'nome',
@@ -150,14 +170,41 @@ function gerarModalForm($idModal, $titulo, $nome = '', $cnpj = '', $id= '') {
                             'value' => $nome,
                             'required' => true,
                         ]); 
+                        }
+
+                        if($_SESSION['nivel'] == 4){
+                            $string .= Form::InputText([
+                                'size' => 6,
+                                'name' => 'nome',
+                                'label' => 'Nome',
+                                'value' => $nome,
+                                'required' => true,
+                            ]); 
+                            }
+
+                        if (isset($_SESSION['logged']) && $_SESSION['nivel'] == 4){
+                            $string .= Form::select([
+                                'size' => 6,
+                                'name' => 'ID_empresa',
+                                'label' => 'Empresa',
+                                'options' => $options,
+                                'value' => $ID_empresa,
+                            ]);
+                        }
                         
-                        $string .= Form::inputText([
-                            'size' => 12,
-                            'name' => 'cnpj',
-                            'label' => 'CNPJ',
-                            'value' => $cnpj,
-                            'class' => 'cnpj',
+                        $string .= Form::inputDate([
+                            'size' => 6,
+                            'name' => 'dt_fim',
+                            'label' => 'Data Fim',
+                            'value' => $dt_fim,
                             'required' => true,
+                        ]); 
+
+                        $string .= Form::inputText([
+                            'size' => 6,
+                            'name' => 'quant_usos',
+                            'label' => 'Quantidade de usos',
+                            'value' => $quant_usos,
                         ]); 
                         $string .=
                          "
@@ -165,7 +212,7 @@ function gerarModalForm($idModal, $titulo, $nome = '', $cnpj = '', $id= '') {
                 </div>
                 <div class='modal-footer'>
                     <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>
-                    <button type='submit' class='btn btn-primary' id='btn_submit_empresas_$id' name='enviar'>Salvar</button>
+                    <button type='submit' class='btn btn-primary' id='btn_submit_cupons_$id' name='enviar'>Salvar</button>
                 </div>
             </div>
         </div>

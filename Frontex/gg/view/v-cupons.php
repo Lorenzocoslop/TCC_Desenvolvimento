@@ -2,9 +2,9 @@
 
 include_once realpath(__DIR__ . '/../../gg/connection/connection.php');
 
-$title = "GG Empresas";
+$title = "GG Cupons";
 
-include_once realpath(__DIR__ . '/../controllers/c-empresas.php');
+include_once realpath(__DIR__ . '/../controllers/c-cupons.php');
 
 include_once realpath(__DIR__ . '/../../model/form.class.php');
 
@@ -12,7 +12,7 @@ include_once realpath(__DIR__ . '/../../model/form.class.php');
 $string = "
         <div class='col-12 text-center'>
             <h3>
-                Empresas
+                Cupons
             </h3>
             <div class= 'text-start'>
                 <button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#meuModal'>
@@ -22,10 +22,10 @@ $string = "
             ";?>
 <?php
 $string .= 
-gerarModalForm('meuModal', 'Adicionar Empresa').
+gerarModalForm('meuModal', 'Adicionar Cupom').
 
     "   
-        <table class='table table-striped' >
+        <table class='table table-striped' id = 'tabelaCupons' >
             ";?>
 
             <?php

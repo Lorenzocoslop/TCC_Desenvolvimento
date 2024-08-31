@@ -108,7 +108,11 @@ if (isset($_GET['delete'])) {
 if (!empty($_POST)) {
     $nome = $_POST['nome'];
     $email = $_POST['email'];
-    $senha = $_POST['senha'];
+    if (!empty($_POST['senha'])) {
+        $senha = password_hash($_POST['senha'], PASSWORD_BCRYPT);
+    } else {
+        $senha = $_POST['senhaantiga'];
+    }
     $telefone = str_replace(['(', ')','-', ' '], '', $_POST['telefone']);
     $ID_empresa = $_POST['ID_empresa'] ?? $_SESSION['ID_empresa'];
     $nivel = $_POST['nivel'];
@@ -262,6 +266,7 @@ function gerarModaisTabela($dados) {
         $estado = $view->estado;
         $cep = $view->cep;
         $cpf = $view->cpf;
+        $senha = $view->senha;
         $imagemPath = $view->img;
 
         // Passa os dados corretamente para o modal
@@ -280,6 +285,7 @@ function gerarModaisTabela($dados) {
         $cpf, 
         $imagemPath,
         $ID_empresa,
+        $senha,
         $id );
         $modais .= gerarModalDelete($view); 
     }
@@ -289,7 +295,7 @@ function gerarModaisTabela($dados) {
 ?>
 
 <?php
-function gerarModalForm($idModal, $titulo, $nome = '', $email = '', $nivel = '', $telefone = '', $endereco = '', $bairro = '', $numero = '', $cidade = '', $estado = '', $cep = '', $cpf = '', $imagemPath = '', $ID_empresa = '', $id= '') {
+function gerarModalForm($idModal, $titulo, $nome = '', $email = '', $nivel = '', $telefone = '', $endereco = '', $bairro = '', $numero = '', $cidade = '', $estado = '', $cep = '', $cpf = '', $imagemPath = '', $ID_empresa = '', $senha = '', $id= '') {
     global $pdo;
 
     $empresas = new Empresa($pdo);
@@ -417,6 +423,11 @@ function gerarModalForm($idModal, $titulo, $nome = '', $email = '', $nivel = '',
                                 'type' => 'password',
                                 'label' => 'Senha',
                                 'required' => true,
+                            ]);
+
+                            $string.= Form::inputHidden([
+                                'name' => 'senhaantiga',
+                                'value' => $senha,
                             ]);
 
                             $string.= Form::inputText([

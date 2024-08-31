@@ -12,7 +12,7 @@ include_once realpath(__DIR__ . '/../../model/form.class.php');
 $string = "
         <div class='col-12 text-center'>
             <h3>
-                Frontex
+                Configura&ccedil;&otilde;es da Loja
             </h3>
         </div>";
 $string .= 

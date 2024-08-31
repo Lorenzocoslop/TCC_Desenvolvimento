@@ -47,12 +47,27 @@
             
             return $valorLimpo;
         }
+
         public static function parsePhone($telefone) {
 
             $telefoneLimpo = preg_replace('/\D/', '', $telefone);
             
             return $telefoneLimpo;
         }
+
+        public static function parseData($data)
+        {
+            $date = DateTime::createFromFormat('d/m/Y', $data);
+            return $date ? $date->format('Y-m-d') : null;
+        }
+
+        public static function exibirData($data)
+        {
+            $date = DateTime::createFromFormat('Y-m-d', $data);
+            return $date ? $date->format('d/m/Y') : null;
+        }
+
+
     }
 
 ?>
