@@ -1,5 +1,5 @@
 <?php
-include_once realpath(__DIR__ . '/../connection/connection.php');
+include_once realpath(__DIR__ . '/../../connection/connection.php');
 include_once '../../model/empresa.class.php';
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -163,7 +163,7 @@ if (!empty($_POST)) {
                     $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, img = ?, descricao = ?, codigobarra = ?, preco_venda = ?, preco_promocao = ?, tem_codigo = ? WHERE id = ?");
                     $stmt->execute([$nome, $baseUrl, $descricao, $codigobarra, $preco_venda, $preco_promocao, $tem_codigo, $id]);
                 } else {
-                    $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, img = ?, descricao = ?, preco_venda = ?, preco_promocao = ?, tem_codigo = ?,  WHERE id = ?");
+                    $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, img = ?, descricao = ?, preco_venda = ?, preco_promocao = ?, tem_codigo = ?  WHERE id = ?");
                     $stmt->execute([$nome, $baseUrl, $descricao, $preco_venda, $preco_promocao, $tem_codigo, $id]);
                 }
 

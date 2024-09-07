@@ -1,0 +1,44 @@
+.primary{
+    color: #003399;
+  }
+  
+  .btn-outline-primary {
+      color: #003399; 
+      border: 2px solid #003399; 
+      background-color: transparent; 
+      padding: 0.375rem 0.75rem;
+      font-size: 1rem;
+      border-radius: 0.25rem;
+      transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+      text-align: center;
+      cursor: pointer;
+  }
+  
+  .btn-outline-primary:hover {
+      color: white;
+      background-color: #003399; 
+      border-color: #003399; 
+  }
+  
+  .bg-primary{
+      background-color: #003399;
+      color: white; 
+  }
+
+  .icon-container {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-badge {
+    position: absolute;
+    margin-top: -30px;
+    margin-right: 20px;
+    padding: 5px 10px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    transform: translate(50%, -50%);
+}

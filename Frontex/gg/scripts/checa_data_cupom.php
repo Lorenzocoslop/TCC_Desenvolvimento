@@ -1,5 +1,5 @@
 <?php
-include_once realpath(__DIR__ . '/../connection/connection.php');
+include_once realpath(__DIR__ . '/../../connection/connection.php');
 
 
 $data = json_decode(file_get_contents('php://input'), true);

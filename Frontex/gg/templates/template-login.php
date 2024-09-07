@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include_once realpath(__DIR__ . '/../connection/connection.php');
+include_once realpath(__DIR__ . '/../../connection/connection.php');
 
 require '../../model/path.php';
 
@@ -23,9 +23,9 @@ if (isset($_COOKIE['LE']) && isset($_COOKIE['LP']) && !empty($_COOKIE['LE']) && 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= isset($title) ? $title : 'Login' ?></title> <!-- Verifica se $title está definido -->
-    <link rel="stylesheet" href="../css/common.css">
-    <link rel="stylesheet" href="../css/view.css">
+    <title><?= isset($title) ? $title : 'Login' ?></title>
+    <link rel="stylesheet" href="../../css/common.css">
+    <link rel="stylesheet" href="../../css/view.css">
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
     <script src='https://code.jquery.com/jquery-3.7.1.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js'></script>

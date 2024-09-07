@@ -1,5 +1,5 @@
 <?php
-require_once '../connection/config.php';
+require_once '../../connection/config.php';
 
 $post = filter_input_array(INPUT_POST,FILTER_SANITIZE_SPECIAL_CHARS);
 $postfilter = array_map('strip_tags', $post);

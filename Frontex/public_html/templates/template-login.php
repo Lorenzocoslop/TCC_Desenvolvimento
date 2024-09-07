@@ -1,6 +1,6 @@
 <?php
 ob_start();
-include_once realpath(__DIR__ . '/../../gg/connection/connection.php');
+include_once realpath(__DIR__ . '/../../connection/connection.php');
 
 require '../../model/path.php';
 

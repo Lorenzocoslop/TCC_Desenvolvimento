@@ -53,11 +53,9 @@ class Produtos {
                             <p class='card-text text-center'> De <s class = 'text-danger'>$preco_venda </s> </p>
                             <p class='card-text text-center'> Por apenas <b class = 'text-success'>$preco_promocao</b> </p> 
                         </div>
-                        <a href='#' style='text-decoration: none;'>
-                                <div class = 'text-center bg-custom' style = 'padding: 10px;'>
-                                    Comprar
-                                </div>
-                            </a>
+                        <a href='#' class='btn btn-outline-primary'>
+                                Comprar
+                        </a>
                     </div>
                 </div>"; 
             } else {
@@ -69,10 +67,8 @@ class Produtos {
                                 <h5 class='card-title text-center'>$nome</h5>
                                 <p class='card-text text-center'><b class = 'text-success'>$preco_venda</b></p>
                             </div>
-                        <a href='#' style='text-decoration: none;'>
-                            <div class = 'text-center bg-custom' style = 'padding: 10px;'>
+                        <a href='#' class='btn btn-outline-primary'>
                                 Comprar
-                            </div>
                         </a>
                     </div>
                 </div>";

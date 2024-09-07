@@ -1,6 +1,6 @@
 <?php
 include_once "../../model/utils.class.php";
-require_once '../../gg/connection/config.php'; 
+require_once '../../connection/config.php'; 
 $primaria = Utils::definirCores();
 ?>
 
@@ -11,9 +11,11 @@ $primaria = Utils::definirCores();
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?= $title ?></title>
-        <link rel="stylesheet" href="../css/common.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <link href="../../css/custom.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/common.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     </head>
@@ -34,8 +36,8 @@ $primaria = Utils::definirCores();
 <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark">
     <div class="container-fluid">
 
-        <a class="navbar-brand d-flex align-items-center" href="#">
-            <img src="../../brand/logo_alt.png" class="img-fluid" alt="Logo" width="150" height="50" class="d-inline-block align-text-top">
+        <a class="navbar-brand d-flex align-items-center" href= "../view/v-home.php">
+            <img  src="../../brand/logo_alt.png" class="img-fluid" alt="Logo" width="150" height="50" class="d-inline-block align-text-top">
         </a>
         <?php if (isset($_SESSION['logged']) && $_SESSION['logged'] === 1): ?>
             <small class="saudacao">Olá, <?=$_SESSION['nome']?></small>
@@ -48,13 +50,14 @@ $primaria = Utils::definirCores();
             <div class="d-flex justify-content-center flex-grow-1">
                 <form class="d-flex col-lg-6 col-md-8 col-sm-10" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn-outline-custom" type="submit">Pesquisar</button>
+                    <button class="btn-outline-primary" type="submit">Pesquisar</button>
                 </form>
             </div>
 
-            <div class="d-flex align-items-center ms-auto" id="navbarSupportedContent">
+            <div class="d-flex align-items-center ms-auto icon-container" id="navbarSupportedContent">
                 <a class="navbar-brand" href="v-carrinho.php">
-                    <i class="material-icons color-primary" style="color: <?=$primaria?>; font-size: 35px">local_mall</i>
+                    <i class="lni lni-shopping-basket d-flex" style="color: <?=$primaria?>; font-size: 35px"></i>
+                    <span class="notification-badge">3</span>
                 </a>
             </div>
             <div class="d-flex align-items-center ms-auto" id="navbarSupportedContent">
@@ -80,6 +83,7 @@ $primaria = Utils::definirCores();
         </div>
     </div>
 </nav>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <?=$string?> 
 
     <footer>

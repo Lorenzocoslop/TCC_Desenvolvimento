@@ -1,5 +1,5 @@
 <?php
-include_once realpath(__DIR__ . '/../connection/connection.php');
+include_once realpath(__DIR__ . '/../../connection/connection.php');
 
 
 if (isset($_POST['id']) && isset($_POST['preco_promocao'])) {

@@ -3,7 +3,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-include_once realpath(__DIR__ . '/../connection/connection.php');
+include_once realpath(__DIR__ . '/../../connection/connection.php');
 
 if (isset($_POST['id']) && isset($_POST['tabela'])) {
     $id = (int)$_POST['id'];
