@@ -1,6 +1,14 @@
 .primary{
     color: #003399;
   }
+
+.tertiary{
+    color: #E8E1E0;
+  }
+
+  .bg-tertiary{
+    background-color: #E8E1E0;
+  }
   
   .btn-outline-primary {
       color: #003399; 

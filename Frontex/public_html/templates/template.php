@@ -1,6 +1,7 @@
 <?php
 include_once "../../model/utils.class.php";
 require_once '../../connection/config.php'; 
+include_once realpath(__DIR__ . '/../controllers/c-carrinho.php');
 $primaria = Utils::definirCores();
 ?>
 
@@ -11,13 +12,13 @@ $primaria = Utils::definirCores();
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?= $title ?></title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-        <link href="../../css/custom.css" rel="stylesheet">
-        <link rel="stylesheet" href="../../css/common.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">  
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+        <link rel="stylesheet" href="../../css/common.css">
+        <link rel="stylesheet" href="../../css/custom.css">
     </head>
     <body>
         <?php
@@ -53,16 +54,28 @@ $primaria = Utils::definirCores();
                     <button class="btn-outline-primary" type="submit">Pesquisar</button>
                 </form>
             </div>
-
-            <div class="d-flex align-items-center ms-auto icon-container" id="navbarSupportedContent">
-                <a class="navbar-brand" href="v-carrinho.php">
-                    <i class="lni lni-shopping-basket d-flex" style="color: <?=$primaria?>; font-size: 35px"></i>
-                    <span class="notification-badge">3</span>
-                </a>
-            </div>
+            <?php
+                $carrinho = new Carrinho(); 
+                $carrinho->contaPedidos();
+                if($carrinho->contaPedidos() > 0){?>
+                    <div class="d-flex align-items-center ms-auto icon-container" id="navbarSupportedContent">
+                        <a class="navbar-brand" href="v-carrinho.php">
+                            <i class="lni lni-shopping-basket d-flex primary" style="font-size: 35px"></i>
+                            <span class="notification-badge" id='notificacoes'><?= $carrinho->contaPedidos();?></span>
+                        </a>
+                    </div>
+               <?php }else{?>
+                    <div class="d-flex align-items-center ms-auto icon-container" id="navbarSupportedContent">
+                        <a class="navbar-brand" href="v-carrinho.php">
+                            <i class="lni lni-shopping-basket d-flex primary" style=" font-size: 35px"></i>
+                            <span class="notification-badge" id="notificacoes" style="display:none"><?= $carrinho->contaPedidos(); ?></span>
+                        </a>
+                    </div>
+                <?php } ?>
+            
             <div class="d-flex align-items-center ms-auto" id="navbarSupportedContent">
-                <a class="nav-link dropdown-toggle color-primary" style="color: <?=$primaria?>;" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="material-icons color-primary" style="color: <?=$primaria?>; font-size: 35px;">person</i>
+                <a class="nav-link dropdown-toggle primary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="material-icons primary" style=" font-size: 35px;">person</i>
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-end">

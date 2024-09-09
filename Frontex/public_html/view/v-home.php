@@ -45,6 +45,6 @@ $string = "
     $string .= Produtos::gerarCardProdutos($dados); 
     $string .="  
     </section>
-    ";
+    <script src='../../js/ajax_compras.js'></script>";
 
 include_once realpath(__DIR__ . '/../templates/template.php'); ?>
