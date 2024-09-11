@@ -27,6 +27,12 @@
       background-color: #003399; 
       border-color: #003399; 
   }
+
+  .btn-primary {
+    color: white;
+    background-color: #003399; 
+    border-color: #003399; 
+}
   
   .bg-primary{
       background-color: #003399;

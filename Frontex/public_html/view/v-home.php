@@ -45,6 +45,19 @@ $string = "
     $string .= Produtos::gerarCardProdutos($dados); 
     $string .="  
     </section>
+    <div class='modal fade' id='modalLogar' tabindex='-1' aria-labelledby='modalLogarLabel' aria-hidden='true'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+            <div class='modal-body'>
+                Para prosseguir com a compra cadastre-se e faça login.
+            </div>
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Voltar</button>
+                <a href='v-login.php' type='button' class='btn btn-primary'>Logar</a>
+            </div>
+            </div>
+        </div>
+    </div>
     <script src='../../js/ajax_compras.js'></script>";
 
 include_once realpath(__DIR__ . '/../templates/template.php'); ?>

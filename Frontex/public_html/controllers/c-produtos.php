@@ -1,6 +1,10 @@
 <?php
 include_once realpath(__DIR__ . '/../model/config.empresa.php');
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 class Produtos {
     private $pdo;
     private $tabela = 'produtos';
@@ -54,12 +58,22 @@ class Produtos {
                             <h5 class='card-title text-center'> $nome </h5>
                             <p class='card-text text-center'> De <s class = 'text-danger'>$preco_venda </s> </p>
                             <p class='card-text text-center'> Por apenas <b class = 'text-success'>$preco_promocao</b> </p> 
-                        </div>
+                        </div>";
+                        if(isset($_SESSION['logged']) && $_SESSION['logged'] == 1){
+                        $string.="
                         <button class='btn btn-outline-primary rounded btn-comprar' data-id='$ID'>
                                 Comprar
                         </button>
                     </div>
                 </div>"; 
+                        }else{
+                            $string.="
+                            <button class='btn btn-outline-primary rounded' data-bs-toggle='modal' data-bs-target='#modalLogar'>
+                                    Comprar
+                            </button>
+                        </div>
+                    </div>";  
+                        }
             } else {
                 $string .= "
                 <div class='col'>
@@ -68,12 +82,23 @@ class Produtos {
                             <div class='card-body d-flex flex-column justify-content-between' style='height: 150px;'>
                                 <h5 class='card-title text-center'>$nome</h5>
                                 <p class='card-text text-center'><b class = 'text-success'>$preco_venda</b></p>
-                            </div>
-                        <button href='#' class='btn btn-outline-primary rounded btn-comprar' data-id='$view->ID'>
+                            </div>";
+
+                        if(isset($_SESSION['logged']) && $_SESSION['logged'] == 1){
+                        $string.="
+                        <button class='btn btn-outline-primary rounded btn-comprar' data-id='$ID'>
                                 Comprar
                         </button>
                     </div>
-                </div>";
+                </div>"; 
+                        }else{
+                            $string.="
+                            <button class='btn btn-outline-primary rounded' data-bs-toggle='modal' data-bs-target='#modalLogar'>
+                                    Comprar
+                            </button>
+                        </div>
+                    </div>";  
+                        }
             }
         }
 

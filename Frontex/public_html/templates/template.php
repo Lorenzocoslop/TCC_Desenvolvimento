@@ -55,6 +55,8 @@ $primaria = Utils::definirCores();
                 </form>
             </div>
             <?php
+                if (isset($_SESSION['logged']) && $_SESSION['logged'] === 1){?>
+                <?php
                 $carrinho = new Carrinho(); 
                 $carrinho->contaPedidos();
                 if($carrinho->contaPedidos() > 0){?>
@@ -71,7 +73,8 @@ $primaria = Utils::definirCores();
                             <span class="notification-badge" id="notificacoes" style="display:none"><?= $carrinho->contaPedidos(); ?></span>
                         </a>
                     </div>
-                <?php } ?>
+                <?php }
+                } ?>
             
             <div class="d-flex align-items-center ms-auto" id="navbarSupportedContent">
                 <a class="nav-link dropdown-toggle primary" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

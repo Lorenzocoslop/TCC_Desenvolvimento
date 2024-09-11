@@ -134,12 +134,11 @@ if (!empty($_POST)) {
     $nome = $_POST['nome'];
     $descricao = $_POST['descricao'];
     $imagem = $_FILES['img'];
+    $ID_categoria = $_POST['ID_categoria'];
     $imagem_sem_imagem = '../../image/produto-sem-imagem.jpg';
-    $codigobarra = $_POST['codigobarra'];
     $ID_empresa = $_POST['ID_empresa'] ?? $_SESSION['ID_empresa'];
     $preco_venda = formatarPrecoParaSalvar($_POST['preco_venda']);
     $preco_promocao = formatarPrecoParaSalvar($_POST['preco_promocao'] ?? 0);
-    $tem_codigo = $_POST['tem_codigo'] ?? 0;
     $id = $_POST['id'] ?? null;
 
     if ($id) {
@@ -158,14 +157,8 @@ if (!empty($_POST)) {
                 if ($imagemAntiga && file_exists($imagemAntiga)) {
                     unlink($imagemAntiga);
                 }
-
-                if($_POST['tem_codigo'] != 0){
-                    $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, img = ?, descricao = ?, codigobarra = ?, preco_venda = ?, preco_promocao = ?, tem_codigo = ? WHERE id = ?");
-                    $stmt->execute([$nome, $baseUrl, $descricao, $codigobarra, $preco_venda, $preco_promocao, $tem_codigo, $id]);
-                } else {
-                    $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, img = ?, descricao = ?, preco_venda = ?, preco_promocao = ?, tem_codigo = ?  WHERE id = ?");
-                    $stmt->execute([$nome, $baseUrl, $descricao, $preco_venda, $preco_promocao, $tem_codigo, $id]);
-                }
+                    $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, img = ?, descricao = ?, preco_venda = ?, preco_promocao = ?, ID_categoria = ?  WHERE id = ?");
+                    $stmt->execute([$nome, $baseUrl, $descricao, $preco_venda, $preco_promocao, $ID_categoria, $id]);
 
                 echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Produto atualizado com sucesso </div></div></div>";
             } else {
@@ -173,13 +166,8 @@ if (!empty($_POST)) {
             }
         } else {
             // Atualização sem nova imagem
-            if($_POST['tem_codigo'] != 0){
-                $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, descricao = ?, codigobarra = ?, preco_venda = ?, preco_promocao = ?, tem_codigo = ? WHERE id = ?");
-                $stmt->execute([$nome, $descricao, $codigobarra, $preco_venda, $preco_promocao, $tem_codigo, $id]);
-            } else {
-                $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, descricao = ?, preco_venda = ?, preco_promocao = ?, tem_codigo = ? WHERE id = ?");
-                $stmt->execute([$nome, $descricao, $preco_venda, $preco_promocao, $tem_codigo, $id]);
-            }
+                $stmt = $pdo->prepare("UPDATE $TABELA SET nome = ?, descricao = ?, preco_venda = ?, preco_promocao = ?, ID_categoria = ? WHERE id = ?");
+                $stmt->execute([$nome, $descricao, $preco_venda, $preco_promocao, $ID_categoria, $id]);
 
             echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Produto atualizado com sucesso </div></div></div>";
         }
@@ -192,19 +180,8 @@ if (!empty($_POST)) {
             $baseUrl = $diretorio . uniqid() . '_' . basename($imagem['name']);
 
             if (move_uploaded_file($imagem['tmp_name'], $baseUrl)) {
-                if($_POST['tem_codigo'] != 0){
-                    $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao, codigobarra, preco_venda, preco_promocao, tem_codigo) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                    $stmt->execute([$nome, $baseUrl, $descricao, $codigobarra, $preco_venda, $preco_promocao, $tem_codigo]);
-                    
-                    $stmt = $pdo->query("SELECT LAST_INSERT_ID() AS ID");
-                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                    $id_produto = $row['ID'];
-
-                    $stmt = $pdo->prepare("INSERT INTO empresa_produtos (ID_produto,ID_empresa) VALUES (?, ?)");
-                    $stmt->execute([$id_produto,$ID_empresa]);
-                } else {
-                    $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao, preco_venda, preco_promocao, tem_codigo) VALUES (?, ?, ?, ?, ?, ?)");
-                    $stmt->execute([$nome, $baseUrl, $descricao, $preco_venda, $preco_promocao, $tem_codigo]);
+                    $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao, preco_venda, preco_promocao,ID_categoria) VALUES (?, ?, ?, ?, ?, ?)");
+                    $stmt->execute([$nome, $baseUrl, $descricao, $preco_venda, $preco_promocao, $ID_categoria]);
 
                     $stmt = $pdo->query("SELECT LAST_INSERT_ID() AS ID");
                     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -212,26 +189,14 @@ if (!empty($_POST)) {
                     
                     $stmt = $pdo->prepare("INSERT INTO empresa_produtos (ID_produto,ID_empresa) VALUES (?, ?)");
                     $stmt->execute([$id_produto,$ID_empresa]);
-                }
 
                 echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Produto inserido com sucesso </div></div></div>";
             } else {
                 echo "Erro ao salvar o arquivo.";
             }
         } else {
-            if($_POST['tem_codigo'] != 0){
-                $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao, codigobarra, preco_venda, preco_promocao, tem_codigo) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$nome, $imagem_sem_imagem, $descricao, $codigobarra, $preco_venda, $preco_promocao, $tem_codigo]);
-                
-                $stmt = $pdo->query("SELECT LAST_INSERT_ID() AS ID");
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                $id_produto = $row['ID'];
-
-                $stmt = $pdo->prepare("INSERT INTO empresa_produtos (ID_produto,ID_empresa) VALUES (?, ?)");
-                $stmt->execute([$id_produto,$ID_empresa]);
-            } else {
-                $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao, preco_venda, preco_promocao, tem_codigo) VALUES (?, ?, ?, ?, ?, ?)");
-                $stmt->execute([$nome, $imagem_sem_imagem, $descricao, $preco_venda, $preco_promocao, $tem_codigo]);
+                $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao, preco_venda, preco_promocao) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$nome, $imagem_sem_imagem, $descricao, $preco_venda, $preco_promocao, $ID_categoria]);
 
                 $stmt = $pdo->query("SELECT LAST_INSERT_ID() AS ID");
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -239,7 +204,6 @@ if (!empty($_POST)) {
 
                 $stmt = $pdo->prepare("INSERT INTO empresa_produtos (ID_produto,ID_empresa) VALUES (?, ?)");
                 $stmt->execute([$id_produto,$ID_empresa]);
-            }
 
             echo "<div class='status-top-right text-center' id='status-container'><div class='status status-success'><div class='status-message'> Produto inserido com sucesso </div></div></div>";
         }
@@ -250,11 +214,11 @@ if (!empty($_POST)) {
 
 if($_SESSION['ID_empresa'] == 0){
     $stmt = $pdo->prepare('
-    SELECT p.ID,p.nome,p.img,p.descricao,p.codigobarra,p.preco_venda,p.preco_promocao,p.tem_codigo,p.ativo, ep.ID_empresa FROM '. $TABELA .' p
+    SELECT p.ID,p.nome,p.img,p.descricao,p.preco_venda,p.preco_promocao,p.ativo,p.ID_categoria, ep.ID_empresa FROM '. $TABELA .' p
       JOIN empresa_produtos ep ON p.ID = ep.ID_produto');
 } else {
     $stmt = $pdo->prepare('
-    SELECT p.ID,p.nome,p.img,p.descricao,p.codigobarra,p.preco_venda,p.preco_promocao,p.tem_codigo,p.ativo, ep.ID_empresa FROM '. $TABELA .' p
+    SELECT p.ID,p.nome,p.img,p.descricao,p.preco_venda,p.preco_promocao,p.ativo,p.ID_categoria, ep.ID_empresa FROM '. $TABELA .' p
       JOIN empresa_produtos ep ON p.ID = ep.ID_produto
      WHERE ep.ID_empresa = '.$_SESSION['ID_empresa'].'');
     }
@@ -356,13 +320,12 @@ function gerarModaisTabela($dados) {
         $nome = $view->nome; 
         $descricao = $view->descricao;
         $imagemPath = $view->img;
-        $codigobarra = $view->codigobarra;
-        $tem_codigo = $view->tem_codigo;
         $ID_empresa = $view->ID_empresa;
+        $ID_categoria = $view->ID_categoria;
         $preco_venda = formatarPrecoParaTelaPromocao($view->preco_venda);
         $preco_promocao = formatarPrecoParaTelaPromocao($view->preco_promocao);
 
-        $modais .= gerarModalForm("formModal$id", "Alterar Produto", $nome, $descricao, $imagemPath, $preco_venda, $preco_promocao, $codigobarra, $tem_codigo, $ID_empresa, $id);
+        $modais .= gerarModalForm("formModal$id", "Alterar Produto", $nome, $descricao, $imagemPath, $preco_venda, $preco_promocao, $ID_empresa, $ID_categoria, $id);
         
         $modais .= gerarModalDelete($view); 
     }
@@ -372,7 +335,7 @@ function gerarModaisTabela($dados) {
 ?>
 
 <?php
-function gerarModalForm($idModal, $titulo, $nome = '', $descricao = '', $imagemPath = '', $preco_venda = '', $preco_promocao = '', $codigobarra = '', $tem_codigo = 0, $ID_empresa = NULL, $id ='') {
+function gerarModalForm($idModal, $titulo, $nome = '', $descricao = '', $imagemPath = '', $preco_venda = '', $preco_promocao = '', $ID_empresa = '', $ID_categoria = '', $id ='') {
 
     global $pdo;
 
@@ -384,9 +347,17 @@ function gerarModalForm($idModal, $titulo, $nome = '', $descricao = '', $imagemP
         $options[$empresa->ID] = $empresa->nome;
     }
 
-    $tem_codigo = (int) $tem_codigo;
-    $checked2 = $tem_codigo === 0 ? 'checked' : '';
-    $checked3 = $tem_codigo === 1 ? 'checked' : '';
+    $stmt = $pdo->prepare('SELECT c.ID,c.nome,c.img,c.ativo,ce.ID_empresa FROM categorias c
+                             JOIN categorias_empresas ce ON ce.ID_categoria = c.ID
+                            WHERE ativo = 1 AND ce.ID_empresa = ' . $_SESSION['ID_empresa']);
+    $stmt->execute();
+    $listacategorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+
+    $optionscategorias = ['0' => 'Selecione'];
+    foreach ($listacategorias as $categoria) {
+        $optionscategorias[$categoria['ID']] = $categoria['nome'];
+    }
 
     $string = "
     <div class='modal fade' id='$idModal' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='{$idModal}Label' aria-hidden='true'>
@@ -443,6 +414,14 @@ function gerarModalForm($idModal, $titulo, $nome = '', $descricao = '', $imagemP
                                     <img id='imgPreview' class = 'img-fluid' src='$imagemPath' alt='Preview da Imagem' style='display: " . ($imagemPath ? "block" : "none") . "; max-width: 100%; height: auto;'>
                                 </div>
                                 ";
+                        $string.= Form::select([
+                            'size' => 12,
+                            'name' => 'ID_categoria',
+                            'label' => 'Categoria',
+                            'options' => $optionscategorias,
+                            'value' => $ID_categoria,
+                            'required' => true,
+                        ]);
                         $string.= Form::textarea([
                                     'size' => 12,
                                     'name' => 'descricao',
@@ -450,29 +429,6 @@ function gerarModalForm($idModal, $titulo, $nome = '', $descricao = '', $imagemP
                                     'attributes' => 'style = "height:100%"',
                                     'value' => $descricao,
                                 ]);
-                        $string.="
-                        <div class='form-group col-md-6 mb-2 text-center'>
-                            <label for='tem_codigo' class='form-label text-center'>Tem código de barras</label>
-                            <div class='d-flex justify-content-center'>
-                                <div class='btn-group' role='group' aria-label='Tem código de barras'>
-                                    <input type='radio' class='btn-check' id='tem_codigo_1_$id' name='tem_codigo' value='1' $checked3>
-                                    <label class='btn btn-secondary' for='tem_codigo_1_$id'>Sim</label>
-
-                                    <input type='radio' class='btn-check' id='tem_codigo_0_$id' name='tem_codigo' value='0' $checked2>
-                                    <label class='btn btn-secondary' for='tem_codigo_0_$id'>N&atilde;o</label>
-                                </div>
-                            </div>
-                        </div>
-                        " ;
-                        $string.= Form::InputText([
-                                'size' => 6,
-                                'name' => 'codigobarra',
-                                'id' => 'codigobarra',
-                                'label' => 'Código de Barras',
-                                'attributes'=> 'data-bs-toggle="collapse"',
-                                'idlabel' => 'label_codigobarra',
-                                'value' => $codigobarra,
-                            ]); 
                         $string.= Form::inputMoney([
                                 'size' => 6,
                                 'name' => 'preco_venda',

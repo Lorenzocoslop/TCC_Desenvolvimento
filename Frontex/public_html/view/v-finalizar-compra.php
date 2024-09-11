@@ -2,53 +2,68 @@
 
 include_once realpath(__DIR__ . '/../../connection/connection.php');
 
-$title = "Carrinho";
+$title = "Finalizar Compra";
 
 include_once realpath(__DIR__ . '/../controllers/c-home.php');
+include_once realpath(__DIR__ . '/../controllers/c-finalizar-compra.php');
 include_once realpath(__DIR__ . '/../controllers/c-carrinho.php');
 
-$carrinho = new Carrinho();
-$dados = $carrinho->buscaPedidos();
 $string = "
     <main class='bg-tertiary'>
-        <div class = 'container'>
             <div class = 'row'>
             ";
-            if(count($dados) == 0){
-                $string.="
-                <div class = 'col col-md-12'>
-                    <div class='bg-light m-5 border rounded'>
-                        <h2 class = 'text-center border-bottom border-dark'>Meu Carrinho</h2>";
-                        $dados = $carrinho->buscaPedidos();
-                        $string .= Carrinho::listarProdutos($dados);
-                    $string .="
-                    </div>
-                </div>";        
-            } else{
             $string.="
-                <div class = 'col col-md-8'>
-                    <div class='bg-light m-5 border rounded'>
-                        <h2 class = 'text-center border-bottom border-dark'>Meu Carrinho</h2>";
-                        $dados = $carrinho->buscaPedidos();
-                        $string .= Carrinho::listarProdutos($dados);
+                    <div class='accordion col col-md-7 mt-5 ms-3' id='accordionExample'>
+                        <div class='accordion-item'>
+                            <h2 class='accordion-header'>
+                                <button class='accordion-button' type='button' data-bs-toggle='collapse' data-bs-target='#collapseprodutos' aria-expanded='true' aria-controls='collapseOne'>
+                                    Produtos
+                                </button>
+                            </h2>
+                            <div id='collapseprodutos' class='accordion-collapse collapse show' data-bs-parent='#accordionExample'>
+                                <div class='accordion-body'>";
+                                    $string .= listarProdutos();
+                                $string .= "
+                                </div>
+                            </div>
+                        </div>
+                        <div class='accordion-item'>
+                            <h2 class='accordion-header'>
+                                <button class='accordion-button' type='button' data-bs-toggle='collapse' data-bs-target='#collapseendereco' aria-expanded='true' aria-controls='collapseOne'>
+                                    Endere&ccedil;o
+                                </button>
+                            </h2>
+                            <div id='collapseendereco' class='accordion-collapse collapse show' data-bs-parent='#accordionExample'>
+                                <div class='accordion-body'>";
+                                    $string .= gerarEnderecoForm();
+                                $string .= "
+                                </div>
+                            </div>
+                        </div>
+                        <div class='accordion-item'>
+                            <h2 class='accordion-header'>
+                                <button class='accordion-button' type='button' data-bs-toggle='collapse' data-bs-target='#collapseformapagamento' aria-expanded='true' aria-controls='collapseOne'>
+                                    Formas de Pagamento
+                                </button>
+                            </h2>
+                            <div id='collapseformapagamento' class='accordion-collapse collapse show' data-bs-parent='#accordionExample'>
+                                <div class='accordion-body'>";
+                                    $string .= gerarFormaPagamentoForm();
+                                $string .= "
+                                </div>
+                            </div>
+                        </div>
+                    </div>";
+                        
                     $string .="
-                    </div>
-                </div>
                 <div class = 'col col-md-4 '>";
-                $string.= Carrinho::gerarTotalProdutos($dados);
+                $string.= totalPedido();
                 $string.="
                 </div>
             </div>";
-            }
                 
-            $string.="<section class = 'row bg-light m-5 rounded p-4 mx-4'>
-                <h2> Produtos Sugeridos </h2>
-                ";
-            $produtos = new Produtos();
-            $dados = $produtos->buscaProdutos();
-            $string .= Produtos::gerarCardProdutos($dados);
+
             $string.="
-            </section>
         </div>
     <main>
     ";

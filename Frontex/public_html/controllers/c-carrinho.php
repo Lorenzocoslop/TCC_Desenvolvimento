@@ -217,7 +217,7 @@ class Carrinho {
                 </div>
             </div>
             <div class = 'row p-4 text-center'>
-                <a href='../view/v-finalizar-compra' class='btn btn-outline-primary rounded'>
+                <a href='../view/v-finalizar-compra.php' class='btn btn-outline-primary rounded'>
                     Finalizar Compra
                 </a>
             </div>    

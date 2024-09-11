@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    atualizarNotificacoes();
 
     function atualizarNotificacoes() {
         $.ajax({

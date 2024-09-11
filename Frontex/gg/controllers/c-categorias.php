@@ -154,10 +154,17 @@ if (!empty($_POST)) {
         copiarDiretorio(realpath(__DIR__ . '/../resources/uploads/categorias/'), $diretorioAlternativo);
     }
 }
-
-$stmt = $pdo->prepare('SELECT * FROM ' . $TABELA);
+if($_SESSION['ID_empresa'] !== 0){
+$stmt = $pdo->prepare('SELECT c.ID,c.nome,c.img,c.ativo,ce.ID_empresa,ce.ID_categoria FROM ' . $TABELA . ' c
+                         JOIN categorias_empresas ce ON c.ID = ce.ID_categoria
+                        WHERE ID_empresa = '. $_SESSION['ID_empresa']);
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    $stmt = $pdo->prepare('SELECT * FROM ' . $TABELA);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 $obj = array_map(function($view) {
     return (object) $view; 
