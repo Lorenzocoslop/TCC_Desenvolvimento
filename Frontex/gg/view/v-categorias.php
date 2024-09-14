@@ -2,7 +2,7 @@
 
 include_once realpath(__DIR__ . '/../../connection/connection.php');
 
-$title = "GG Empresas";
+$title = "GG Categorias";
 
 include_once realpath(__DIR__ . '/../controllers/c-categorias.php');
 

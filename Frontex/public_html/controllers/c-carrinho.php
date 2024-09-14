@@ -1,5 +1,6 @@
 <?php
 include_once realpath(__DIR__ . '/../model/config.empresa.php');
+require '../../model/path.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -25,7 +26,7 @@ class Carrinho {
 
     public function buscaPedidos() {
         $stmt = $this->pdo->prepare('
-        SELECT cp.ID_produto,p.nome, p.img,p.descricao,p.preco_venda,p.preco_promocao,cp.qtd,cu.valor_desc FROM '. $this->tabela .' c
+        SELECT c.ID, cp.ID_produto,p.nome, p.img,p.descricao,p.preco_venda,p.preco_promocao,cp.qtd,cu.valor_desc FROM '. $this->tabela .' c
           JOIN carrinho_produtos cp ON c.ID = cp.ID_carrinho
           JOIN usuarios u ON u.ID = c.ID_usuario
           JOIN produtos p ON cp.ID_produto = p.ID
@@ -150,6 +151,7 @@ class Carrinho {
     }
 
     public static function gerarTotalProdutos($dados) {
+        global $pagina_atual;
         $string='';
         $pdo = conectar();
         $stmt = $pdo->prepare('
@@ -216,10 +218,20 @@ class Carrinho {
                     <h5 id='totalcomcupom'><strong>$totalcomcupomFormatado</strong></h5>
                 </div>
             </div>
-            <div class = 'row p-4 text-center'>
-                <a href='../view/v-finalizar-compra.php' class='btn btn-outline-primary rounded'>
+            <div class = 'row p-4 text-center'>";
+
+            if($pagina_atual == 'v-finalizar-compra'){
+                $string .="<a id='finalizar_compra' class='btn btn-outline-primary rounded'>
                     Finalizar Compra
-                </a>
+                </a>";
+            }
+
+            if($pagina_atual == 'v-carrinho'){
+                $string .="<a href='../view/v-finalizar-compra.php' class='btn btn-outline-primary rounded'>
+                    Seguir com a compra
+                </a>";
+            }
+                $string .= "
             </div>    
         </div>";
 

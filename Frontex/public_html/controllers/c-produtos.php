@@ -21,7 +21,7 @@ class Produtos {
 
     public function buscaProdutos() {
         $stmt = $this->pdo->prepare('
-        SELECT p.ID,p.nome,p.img,p.descricao,p.codigobarra,p.preco_venda,p.preco_promocao,p.ID_categoria,p.tem_codigo,p.ativo,ep.ID_empresa FROM '. $this->tabela .' p
+        SELECT p.ID,p.nome,p.img,p.descricao,p.preco_venda,p.preco_promocao,p.ID_categoria,p.ativo,ep.ID_empresa FROM '. $this->tabela .' p
           JOIN empresa_produtos ep ON p.ID = ep.ID_produto
          WHERE ep.ID_empresa = :id_empresa');
         $stmt->execute([':id_empresa' => $this->empresa->getID_empresa()]);

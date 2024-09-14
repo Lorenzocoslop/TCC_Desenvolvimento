@@ -1,6 +1,7 @@
 <?php
 include_once "../../model/utils.class.php";
 require_once '../../connection/config.php'; 
+require_once '../../model/path.php';
 include_once realpath(__DIR__ . '/../controllers/c-carrinho.php');
 $primaria = Utils::definirCores();
 ?>
@@ -21,6 +22,17 @@ $primaria = Utils::definirCores();
         <link rel="stylesheet" href="../../css/custom.css">
     </head>
     <body>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div class="toast bg-danger" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+            <div class="toast-header">
+                <strong class="me-auto">Erro</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body text-light">
+                <!-- A mensagem de erro será colocada aqui -->
+            </div>
+        </div>
+    </div>
         <?php
         $action = strip_tags(filter_input(INPUT_GET,'action', FILTER_SANITIZE_SPECIAL_CHARS));
         if($action == 'logout'){

@@ -67,11 +67,12 @@ $string = "
         </div>
     <main>
     ";
-    
+    $string .= gerarAjax();
     $string.="
     <script src='../../js/ajax_compras.js'></script>        
     <script>
         $(document).ready(function() {
+
             function atualizarTotais() {
                 $.ajax({
                     url: '../model/att_totais.php',
@@ -223,10 +224,6 @@ $string = "
             });
         });
     </script>";
-    if(isset($_SESSION['logged']) && $_SESSION['logged'] === 1){
-        $string .="
-        <script>atualizarNotificacoes();</script>";
-        }
 
 
 include_once realpath(__DIR__ . '/../templates/template.php'); ?>

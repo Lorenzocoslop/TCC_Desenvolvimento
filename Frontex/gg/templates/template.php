@@ -52,6 +52,11 @@ if (isset($_SESSION['status_message'])) {
 </head>
 
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    
+
     <div class='result'></div>
     <main>
         <?php
@@ -128,6 +133,14 @@ if (isset($_SESSION['status_message'])) {
                             <span>Pedidos</span>
                         </a>
                     </li>
+                    <?php if (isset($_SESSION['logged']) && $_SESSION['nivel'] >= 3):?>
+                    <li class='sidebar-item'>
+                        <a href='v-formaspagamento.php' class='sidebar-link'>
+                            <i class="lni lni-license"></i>
+                            <span>Pagamento</span>
+                        </a>
+                    </li>
+                    <?php endif; ?>
 
                     <?php if (isset($_SESSION['logged']) && $_SESSION['nivel'] == 4):?>
                     <li class='sidebar-item'>
@@ -177,11 +190,6 @@ if (isset($_SESSION['status_message'])) {
             </div>
         </div>
     </main>
-    
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script src="../../js/view.js"></script>
     
     <?php if ($pagina_atual === 'v-empresas'): ?>
