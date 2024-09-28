@@ -439,7 +439,7 @@ function gerarModalForm($idModal, $titulo, $nome = '', $email = '', $nivel = '',
                                 'required' => true,
                             ]);
 
-                            $string .= '<div class="accordion" id="formAccordion">';
+                        $string .= '<div class="accordion" id="formAccordion">';
                         $string .= '<div class="accordion-item">';
                         $string .= '<h2 class="accordion-header" id="headingOne">';
                         $string .= '<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">';

@@ -128,7 +128,7 @@ if (isset($_SESSION['status_message'])) {
                     <?php endif; ?>
 
                     <li class='sidebar-item'>
-                        <a href='v-banners.php' class='sidebar-link'>
+                        <a href='v-pedidos.php' class='sidebar-link'>
                             <i class="lni lni-cart"></i>
                             <span>Pedidos</span>
                         </a>
