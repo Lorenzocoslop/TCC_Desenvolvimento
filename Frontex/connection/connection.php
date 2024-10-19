@@ -5,8 +5,8 @@ function conectar()
     $server = 'localhost';
     $db = 'base';
     $usuario = 'root';
-    $senha = 'root';
-    $porta= '3308';
+    $senha = '';
+    $porta= '3306';
 
     try {
         $pdo = new PDO("mysql:host=$server;port=$porta;dbname=$db;charset=utf8", $usuario, $senha);
