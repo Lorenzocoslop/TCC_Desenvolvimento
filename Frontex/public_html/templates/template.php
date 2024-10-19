@@ -21,7 +21,7 @@ $primaria = Utils::definirCores();
         <link rel="stylesheet" href="../../css/common.css">
         <link rel="stylesheet" href="../../css/custom.css">
     </head>
-    <body>
+    <body <?php if($pagina_atual != 'v-home'){?> class="bg-tertiary" <?php } ?>>
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <div class="toast bg-danger" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
             <div class="toast-header">
@@ -99,8 +99,7 @@ $primaria = Utils::definirCores();
                             <li><a class="dropdown-item" target='_blank' href="../../gg/view/v-home.php">Painel</a></li>
                         <?php endif; ?>
                         <li><a class="dropdown-item" href="#">Meu Perfil</a></li>
-                        <li><a class="dropdown-item" href="#">Minhas compras</a></li>
-                        <li><a class="dropdown-item" href="#">Meus Cupons</a></li>
+                        <li><a class="dropdown-item" href="../view/v-minhas-compras.php">Minhas compras</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a id="logout" class="dropdown-item" href="?action=logout">Sair</a></li>
                     <?php else: ?>
@@ -113,10 +112,13 @@ $primaria = Utils::definirCores();
 </nav>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <?=$string?> 
-
-    <footer>
+    
+    <?php if($pagina_atual == 'v-home'){?>
+        <footer>
         <p class="text-end">&copy; <?php echo date('Y'); ?> - Todos os direitos reservados.</p>
-    </footer>
+        </footer>
+    <?php } ?>
+    
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
