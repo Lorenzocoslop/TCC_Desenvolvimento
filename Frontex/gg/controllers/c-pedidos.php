@@ -15,7 +15,7 @@ $id_empresa = $_SESSION['ID_empresa'];
 
 
 $stmt = $pdo->prepare('SELECT * FROM ' . $TABELA .'
-                        WHERE ID_empresa = '.$id_empresa);
+                        WHERE ID_empresa = '.$id_empresa.' ORDER BY ID DESC');
 $stmt->execute();
 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -273,4 +273,29 @@ function gerarModaisTabela($dados) {
     
     return $modais;
 }
+
+function obterPedidosPaginados($pdo, $id_empresa, $paginaAtual = 1, $pedidosPorPagina = 10) {
+    $offset = ($paginaAtual - 1) * $pedidosPorPagina;
+
+    // Obtém os pedidos
+    $stmt = $pdo->prepare('SELECT * FROM pedidos WHERE ID_empresa = :id_empresa ORDER BY ID DESC LIMIT :limit OFFSET :offset');
+    $stmt->bindParam(':id_empresa', $id_empresa, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $pedidosPorPagina, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    $pedidos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Obtém o total de pedidos
+    $stmtTotal = $pdo->prepare('SELECT COUNT(*) as total FROM pedidos WHERE ID_empresa = :id_empresa');
+    $stmtTotal->bindParam(':id_empresa', $id_empresa, PDO::PARAM_INT);
+    $stmtTotal->execute();
+    $totalPedidos = $stmtTotal->fetch(PDO::FETCH_ASSOC)['total'];
+    $totalPaginas = ceil($totalPedidos / $pedidosPorPagina);
+
+    return [
+        'pedidos' => $pedidos,
+        'totalPaginas' => $totalPaginas,
+    ];
+}
+
 ?>

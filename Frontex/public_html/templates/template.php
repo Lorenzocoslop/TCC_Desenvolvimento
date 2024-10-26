@@ -61,10 +61,10 @@ $primaria = Utils::definirCores();
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent"> 
             <div class="d-flex justify-content-center flex-grow-1">
-                <form class="d-flex col-lg-6 col-md-8 col-sm-10" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn-outline-primary" type="submit">Pesquisar</button>
-                </form>
+            <form class="d-flex col-lg-6 col-md-8 col-sm-10" role="search" action="../view/v-resultados.php" method="GET">
+                <input class="form-control me-2" type="search" name="query" placeholder="Pesquisar" aria-label="Search">
+                <button class="btn-outline-primary" type="submit">Pesquisar</button>
+            </form>
             </div>
             <?php
                 if (isset($_SESSION['logged']) && $_SESSION['logged'] === 1){?>

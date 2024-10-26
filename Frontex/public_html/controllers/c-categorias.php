@@ -41,26 +41,26 @@ class Categorias {
         foreach ($dados as $index => $view) {
             $imagemPath = $view->img;
             $nome = $view->nome;
-
+            $idCategoria = $view->ID;
+    
             $string .= "
              <swiper-slide>
                 <div class='image-overlay-container' style='position: relative; height: 200px;'>
-                    <a href='#'>
+                    <a href='../view/v-resultados.php?categoria_id=$idCategoria'>
                         <img src='$imagemPath' class='card-img-top img-fluid' style='height: 200px; width: 300px; object-fit: cover;'>
-                        <div  class='image-overlay d-flex flex-column' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);'>
+                        <div class='image-overlay d-flex flex-column' style='position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);'>
                             <h5 class='text-white text-center mt-auto'>$nome</h5>
                         </div>
                     </a>
                 </div>
              </swiper-slide>";
-    
         }
     
-        // Fechar o último item do carrossel
-            $string .= "</swiper-container>";
+        $string .= "</swiper-container>";
     
         return $string;
     }
+    
 }
 
 ?>

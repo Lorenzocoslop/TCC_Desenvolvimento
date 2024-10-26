@@ -19,27 +19,59 @@ class Produtos {
         return conectar();
     }
 
-    public function buscaProdutos() {
-        $stmt = $this->pdo->prepare('
-        SELECT p.ID,p.nome,p.img,p.descricao,p.preco_venda,p.preco_promocao,p.ID_categoria,p.ativo,ep.ID_empresa FROM '. $this->tabela .' p
-          JOIN empresa_produtos ep ON p.ID = ep.ID_produto
-         WHERE ep.ID_empresa = :id_empresa');
-        $stmt->execute([':id_empresa' => $this->empresa->getID_empresa()]);
+    public function buscaProdutos($termoPesquisa = '') {
+        $sql = '
+            SELECT p.ID, p.nome, p.img, p.descricao, p.preco_venda, p.preco_promocao, p.ID_categoria, p.ativo, ep.ID_empresa 
+            FROM ' . $this->tabela . ' p
+            JOIN empresa_produtos ep ON p.ID = ep.ID_produto
+            WHERE ep.ID_empresa = :id_empresa';
+        
+        if (!empty($termoPesquisa)) {
+            $sql .= ' AND (p.nome LIKE :termo OR p.descricao LIKE :termo)';
+        }
+    
+        $stmt = $this->pdo->prepare($sql);
+    
+        $params = [':id_empresa' => $this->empresa->getID_empresa()];
+        if (!empty($termoPesquisa)) {
+            $params[':termo'] = '%' . $termoPesquisa . '%';
+        } 
+        $stmt->execute($params);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    
         return array_map(function($view) {
             return (object) $view; 
         }, $result);
     }
+    
 
     private static function formatarDinheiro($valor) {
         return 'R$ ' . number_format($valor, 2, ',', '.');
     }
 
+    public function buscaProdutosPorCategoria($categoriaId) {
+        $stmt = $this->pdo->prepare('
+            SELECT p.ID, p.nome, p.img, p.descricao, p.preco_venda, p.preco_promocao, p.ID_categoria, p.ativo, ep.ID_empresa 
+            FROM ' . $this->tabela . ' p
+            JOIN empresa_produtos ep ON p.ID = ep.ID_produto
+            WHERE ep.ID_empresa = :id_empresa AND p.ID_categoria = :categoria_id AND p.ativo = 1');
+        
+        $stmt->execute([
+            ':id_empresa' => $this->empresa->getID_empresa(),
+            ':categoria_id' => $categoriaId
+        ]);
+    
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+        return array_map(function($view) {
+            return (object) $view; 
+        }, $result);
+    }
+    
     public static function gerarCardProdutos($dados) {
         $string = '';
         if (empty($dados)) {
-            return "<div class='text-center'>Nenhum produto.</div>";
+            return "<div class='text-center'>Nenhum produto encontrado.</div>";
         }
         $i=0; foreach ($dados as $view) {
             $ID = $view->ID;

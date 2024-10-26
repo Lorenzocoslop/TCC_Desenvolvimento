@@ -27,6 +27,7 @@ $string .= "
 </main>
 
 ";
+$string.= gerarModaisTabela($obj);
     if(isset($_SESSION['logged']) && $_SESSION['logged'] === 1){
         $string .="
         <script>atualizarNotificacoes();</script>";
