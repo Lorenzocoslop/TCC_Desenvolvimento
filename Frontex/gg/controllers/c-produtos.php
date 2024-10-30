@@ -195,7 +195,7 @@ if (!empty($_POST)) {
                 echo "Erro ao salvar o arquivo.";
             }
         } else {
-                $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao, preco_venda, preco_promocao) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt = $pdo->prepare("INSERT INTO $TABELA (nome, img, descricao, preco_venda, preco_promocao,ID_Categoria) VALUES (?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$nome, $imagem_sem_imagem, $descricao, $preco_venda, $preco_promocao, $ID_categoria]);
 
                 $stmt = $pdo->query("SELECT LAST_INSERT_ID() AS ID");
